@@ -18,9 +18,9 @@ public class ReservationRepository {
         UUID id = UUID.randomUUID();
         jdbc.sql("""
             INSERT INTO reservations
-              (id, visitor_id, session_id, name, email, reservation_type, privacy_consent_at, utm)
+              (id, visitor_id, session_id, name, email, reservation_type, privacy_consent_at, utm, job_family, applicant_type, primary_role)
             VALUES
-              (:id, :visitorId, :sessionId, :name, :email, :type, CURRENT_TIMESTAMP, :utm::jsonb)
+              (:id, :visitorId, :sessionId, :name, :email, :type, CURRENT_TIMESTAMP, :utm::jsonb, :jobFamily, :applicantType, :primaryRole)
             """)
             .param("id", id)
             .param("visitorId", req.visitorId())
@@ -29,6 +29,9 @@ public class ReservationRepository {
             .param("email", req.email())
             .param("type", req.reservationType())
             .param("utm", utmJson)
+            .param("jobFamily", req.jobFamily())
+            .param("applicantType", req.applicantType())
+            .param("primaryRole", req.primaryRole())
             .update();
         return id;
     }

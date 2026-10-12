@@ -48,7 +48,7 @@ class ReservationRepositoryTest {
             "test@example.com",
             "QUICK_AI_INTERVIEW",
             true,
-            Map.of()
+            Map.of(), null, null, null
         );
     }
 }

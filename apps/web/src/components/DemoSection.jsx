@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import { reserve, track } from '../api';
+import { useRef, useState } from 'react';
+import { rememberSurveyReservation, reserve, track } from '../api';
+import { APPLICANT_TYPES, JOB_FAMILIES, PRIMARY_ROLES } from '../survey-options';
 
 const OPTIONS = [
   {
@@ -22,22 +23,32 @@ const OPTIONS = [
 
 export default function DemoSection() {
   const [selected, setSelected] = useState(OPTIONS[0].id);
+  const [jobFamily, setJobFamily] = useState('');
+  const [applicantType, setApplicantType] = useState('');
+  const [primaryRole, setPrimaryRole] = useState('');
+  const [continuationSaved, setContinuationSaved] = useState(true);
+  const reservationRef = useRef(null);
   const [status, setStatus] = useState('idle'); // idle | loading | success | duplicate | error
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!e.target.reportValidity()) return;
+    const form = e.currentTarget;
+    if (status === 'loading' || !form.reportValidity()) return;
 
-    const name = e.target.name.value.trim();
-    const email = e.target.email.value.trim();
-    const privacyConsent = e.target.privacyConsent.checked;
+    const fields = new FormData(form);
+    const name = fields.get('name').trim();
+    const email = fields.get('email').trim();
+    const privacyConsent = fields.get('privacyConsent') === 'on';
 
+    const reservationType = selected;
     setStatus('loading');
-    track('reserve_opened', { reservationType: selected });
+    track('reserve_opened', { reservationType });
 
     try {
-      await reserve({ name, email, reservationType: selected, privacyConsent });
-      track('reservation_completed', { reservationType: selected });
+      const reservation = await reserve({ name, email, reservationType, privacyConsent, jobFamily, applicantType, primaryRole });
+      reservationRef.current = reservation;
+      setContinuationSaved(rememberSurveyReservation(reservation));
+      track('reservation_completed', { reservationType });
       setStatus('success');
     } catch (err) {
       setStatus(err.message === 'DUPLICATE_EMAIL' ? 'duplicate' : 'error');
@@ -63,6 +74,7 @@ export default function DemoSection() {
             role="radio"
             aria-checked={selected === opt.id}
             data-option={opt.id}
+            disabled={status === 'loading'}
             onClick={() => setSelected(opt.id)}
           >
             <span className={`badge${opt.badgeClass ? ` ${opt.badgeClass}` : ''}`}>{opt.badge}</span>
@@ -78,15 +90,45 @@ export default function DemoSection() {
           <output>{selectedOption?.title}</output>
         </div>
         {status === 'success' ? (
-          <p className="reservation-message show" role="status">
-            사전예약이 완료됐습니다. 출시 시 연락드리겠습니다.
-          </p>
+          <div className="reservation-message show" role="status">
+            <p>사전예약이 완료됐습니다. 출시 시 연락드리겠습니다.</p>
+            {!continuationSaved && (
+              <p>예약은 정상 접수됐습니다. 이 브라우저에서는 나중에 상세 설문을 이어서 작성할 수 없습니다.</p>
+            )}
+          </div>
         ) : (
           <form onSubmit={handleSubmit}>
-            <input name="name" type="text" autoComplete="name" placeholder="이름" required aria-label="이름" />
-            <input name="email" type="email" autoComplete="email" placeholder="이메일" required aria-label="이메일" />
+            <fieldset className="reservation-survey" disabled={status === 'loading'}>
+              <legend>지원 분야를 알려주세요</legend>
+              <label>
+                <span>직군 <small>(필수)</small></span>
+                <select name="jobFamily" required value={jobFamily} onChange={(e) => {
+                  setJobFamily(e.target.value);
+                  setPrimaryRole('');
+                }}>
+                  <option value="">직군 선택</option>
+                  {JOB_FAMILIES.map(({ code, label }) => <option key={code} value={code}>{label}</option>)}
+                </select>
+              </label>
+              <label>
+                <span>현재 지원 유형 <small>(필수)</small></span>
+                <select name="applicantType" required value={applicantType} onChange={(e) => setApplicantType(e.target.value)}>
+                  <option value="">지원 유형 선택</option>
+                  {APPLICANT_TYPES.map(({ code, label }) => <option key={code} value={code}>{label}</option>)}
+                </select>
+              </label>
+              <label>
+                <span>주 관심 직무 <small>(필수)</small></span>
+                <select name="primaryRole" required disabled={!jobFamily} value={primaryRole} onChange={(e) => setPrimaryRole(e.target.value)}>
+                  <option value="">{jobFamily ? '주 관심 직무 선택' : '직군을 먼저 선택해주세요'}</option>
+                  {(PRIMARY_ROLES[jobFamily] ?? []).map(({ code, label }) => <option key={code} value={code}>{label}</option>)}
+                </select>
+              </label>
+            </fieldset>
+            <input name="name" type="text" autoComplete="name" placeholder="이름" maxLength={100} disabled={status === 'loading'} required aria-label="이름" />
+            <input name="email" type="email" autoComplete="email" placeholder="이메일" disabled={status === 'loading'} required aria-label="이메일" />
             <label className="reservation-consent">
-              <input name="privacyConsent" type="checkbox" required />
+              <input name="privacyConsent" type="checkbox" disabled={status === 'loading'} required />
               <span>개인정보 수집·이용에 동의합니다. (필수)</span>
             </label>
             <button type="submit" disabled={status === 'loading'}>
