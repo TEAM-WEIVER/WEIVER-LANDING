@@ -9,11 +9,12 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.Instant;
 import java.util.Map;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -54,24 +55,39 @@ class ReservationControllerTest {
             .andExpect(jsonPath("$.error").value("DUPLICATE_EMAIL"));
     }
 
-    // AC-3-3
+    // AC-PC-1
     @Test
-    @DisplayName("privacyConsentAt 누락 → 400")
+    @DisplayName("privacyConsent 누락 → 400, 예약 서비스 미호출")
     void reserve_missingPrivacyConsent() throws Exception {
-        Map<String, Object> req = Map.of(
-            "visitorId", UUID.randomUUID().toString(),
-            "sessionId", UUID.randomUUID().toString(),
-            "name", "홍길동",
-            "email", "test@example.com",
-            "reservationType", "QUICK_AI_INTERVIEW"
-            // privacyConsentAt 누락
-        );
+        Map<String, Object> req = new java.util.HashMap<>(validRequest());
+        req.remove("privacyConsent");
+        // 기존 클라이언트 필드는 동의 증빙으로 허용하지 않는다.
+        req.put("privacyConsentAt", "2026-10-12T00:00:00Z");
 
         mvc.perform(post("/api/v1/reservations")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(req)))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.error").value("INVALID_REQUEST"));
+
+        verify(reservationService, never()).reserve(any());
+    }
+
+    // AC-PC-1
+    @Test
+    @DisplayName("privacyConsent가 false → 400, 예약 서비스 미호출")
+    void reserve_falsePrivacyConsent() throws Exception {
+        Map<String, Object> req = new java.util.HashMap<>(validRequest());
+        req.put("privacyConsent", false);
+        req.put("privacyConsentAt", "2026-10-12T00:00:00Z");
+
+        mvc.perform(post("/api/v1/reservations")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(req)))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.error").value("INVALID_REQUEST"));
+
+        verify(reservationService, never()).reserve(any());
     }
 
     // AC-3-4
@@ -126,7 +142,7 @@ class ReservationControllerTest {
         req.put("name", "홍길동");
         req.put("email", "test@example.com");
         req.put("reservationType", "QUICK_AI_INTERVIEW");
-        req.put("privacyConsentAt", Instant.now().toString());
+        req.put("privacyConsent", true);
         req.put("utm", Map.of());
         return req;
     }

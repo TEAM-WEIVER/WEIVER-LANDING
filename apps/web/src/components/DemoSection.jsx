@@ -30,12 +30,13 @@ export default function DemoSection() {
 
     const name = e.target.name.value.trim();
     const email = e.target.email.value.trim();
+    const privacyConsent = e.target.privacyConsent.checked;
 
     setStatus('loading');
     track('reserve_opened', { reservationType: selected });
 
     try {
-      await reserve({ name, email, reservationType: selected });
+      await reserve({ name, email, reservationType: selected, privacyConsent });
       track('reservation_completed', { reservationType: selected });
       setStatus('success');
     } catch (err) {
@@ -84,6 +85,10 @@ export default function DemoSection() {
           <form onSubmit={handleSubmit}>
             <input name="name" type="text" autoComplete="name" placeholder="이름" required aria-label="이름" />
             <input name="email" type="email" autoComplete="email" placeholder="이메일" required aria-label="이메일" />
+            <label className="reservation-consent">
+              <input name="privacyConsent" type="checkbox" required />
+              <span>개인정보 수집·이용에 동의합니다. (필수)</span>
+            </label>
             <button type="submit" disabled={status === 'loading'}>
               {status === 'loading' ? '제출 중...' : '사전예약하기'}
             </button>
