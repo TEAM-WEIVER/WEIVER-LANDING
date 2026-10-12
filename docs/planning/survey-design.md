@@ -766,7 +766,7 @@
 - 기타
 - 경험 없음
 
-> 응답 시간이 길어지면 AI-6.1과 AI-6.2를 하나로 합쳐도 된다(원안 유지). 합치면 AI 최대 노출 문항 수는 FE와 같은 11개가 된다.
+> v1 계약은 AI-6.1과 AI-6.2를 별개로 유지한다. 응답 시간을 보고 합칠 경우 새 설문 버전에서 변경한다. 합치면 AI 최대 노출 문항 수는 FE와 같은 11개가 된다.
 
 ### 섹션 7 · 프로젝트 경험 (2단)
 
@@ -880,10 +880,10 @@
 
 이 문서 범위 밖이다. 진행할 때 이슈를 따로 만든다. 1번은 2·3번보다 먼저 끝나야 한다.
 
-1. **개인정보 동의 수집 결함 수정 (출시 선행조건)**
-   - 지금 예약 폼에는 동의 UI가 없다. 그런데 클라이언트가 `privacyConsentAt`을 현재 시각으로 자동 전송한다(`apps/web/src/api.js`의 `reserve`).
-   - 요청 계약을 `privacyConsent: boolean`으로 바꾸고, 필수 동의 체크 UI를 추가한다. 서버는 `privacyConsent`가 `true`가 아니면 예약을 거부하며, 성공한 동의의 시각은 서버 시각으로 기록한다. 클라이언트 시각은 동의 증빙으로 사용하지 않는다.
-   - 1단 설문이 예약 요청에 붙기 때문에, 이 결함이 남아 있으면 설문 응답도 동의 없이 수집된다.
+1. **개인정보 동의 수집 결함 수정 완료 (현재 main 확인: 2026-10-12)**
+   - 설계 리뷰 당시 자동 `privacyConsentAt` 전송 결함은 현재 main에서 수정되었다. `DemoSection.jsx`에는 required 개인정보 동의 체크박스가 있고 `api.js`의 `reserve`는 체크값을 `privacyConsent` boolean으로 전송한다.
+   - `CreateReservationRequest`의 `@NotNull @AssertTrue`는 누락/false를 거부한다. `ReservationRepository`가 DB의 `CURRENT_TIMESTAMP`로 `privacy_consent_at`을 기록하므로 클라이언트 시각을 동의 증빙으로 사용하지 않는다.
+   - 1단 설문 구현은 이 체크박스·검증·서버 시각 기록을 재사용한다. 계약과 배포 순서는 [설문 계약](../spec/survey-contract.md)에 확정했다.
 2. **랜딩 사전예약 폼 연동** (`apps/web/src/components/DemoSection.jsx`)
    - 1단: 예약 폼에 `S-0.1` → `x-1.1` → `x-2.1`을 추가한다. 직군을 바꾸면 `x-2.1`을 초기화한다(AC-S-10).
    - 2단: 예약 성공 직후 같은 화면 흐름에서 시작한다. `건너뛰기`를 둔다. `x-2.1` 값으로 심화 섹션을 고른다.
@@ -896,8 +896,8 @@
      - `in_progress`인 채 이탈하면 상태를 그대로 둔다. 같은 브라우저로 다시 들어오면 이어서 쓴다.
      - `completed` 이후의 재제출은 `409`로 거부한다.
    - 서버에서 R4를 검증한다(위반 시 `400`).
-   - 저장 방식: 문항 ID를 키로 하는 `jsonb` 한 컬럼 vs 정규화 테이블(`survey_answers`)
-   - 문항 ID와 선택지 코드를 `docs/spec/`에 계약으로 고정한다.
+   - 저장 방식·선택지 코드·소유자 확인·상태 전이·버전·배포 정책은 [설문 계약 v1](../spec/survey-contract.md)에 고정한다. `survey_responses.answers jsonb`를 사용한다.
+   - skipped 이후 재개는 허용하고, completed 이후 변경은 거부한다.
 4. **지표·이벤트** (`docs/spec/analytics.md`)
    - `reservation_completed`의 정의는 바꾸지 않는다(예약 저장 성공 기준).
    - `survey_started`, `survey_skipped`, `survey_completed` 이벤트를 추가한다.
@@ -933,4 +933,4 @@
 | `경험 없음` 배타 규칙 | 사후 정제에서 삭제 | UI와 서버에서 강제 (R4, AC-S-11) |
 | 단일 분기 | 세부 직무 관심도 | 주 관심 분포로 해석 제한 (§7.2) |
 | 프로젝트 서술 | 필수 | 선택 (§3.4) |
-| 개인정보 동의 | — | 자동 `privacyConsentAt` 전송 결함 발견. 출시 선행조건으로 지정 (§9-1) |
+| 개인정보 동의 | — | 리뷰 당시 자동 `privacyConsentAt` 전송 결함 발견. 현재 main에서는 체크박스·privacyConsent 검증·DB 서버 시각 기록으로 수정 완료 (§9-1) |

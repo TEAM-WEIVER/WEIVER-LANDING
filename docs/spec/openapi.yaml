@@ -1,9 +1,11 @@
 openapi: 3.0.3
 info:
   title: weiver Landing API
-  version: 0.1.0
+  version: 0.2.0
+  x-server-event-names: [survey_started, survey_skipped, survey_completed]
   description: |
     weiver 데모 테스터 모집 랜딩페이지 API.
+    설문 계약 v1의 목표 명세이며 구현·배포 상태는 api-contract.md를 참고합니다.
     방문자 식별(F1), 이벤트 트래킹(F2), 사전예약(F3), 어드민 지표(F4)로 구성됩니다.
 
 servers:
@@ -19,6 +21,8 @@ tags:
     description: 행동 이벤트 트래킹 (fire-and-forget)
   - name: Reservation
     description: 데모 테스터 사전예약
+  - name: Survey
+    description: 예약 소유자의 선택 상세 설문 (v1)
   - name: Admin
     description: 운영자 전용 지표 조회
 
@@ -92,6 +96,10 @@ paths:
     post:
       tags: [Reservation]
       summary: 사전예약 등록
+      description: |
+        survey-contract.md의 배포 전환 기간에는 세 설문 필드 전체 생략만 허용합니다.
+        엄격 검증 활성화 후에는 세 필드 모두 필수이며 직군별 primaryRole을 검증합니다.
+        예약, 초기 설문 행, 접근 토큰 해시를 한 트랜잭션으로 생성합니다.
       operationId: reserve
       requestBody:
         required: true
@@ -109,9 +117,17 @@ paths:
                   email: "test@example.com"
                   reservationType: "QUICK_AI_INTERVIEW"
                   privacyConsent: true
+                  jobFamily: FE
+                  applicantType: entry_level
+                  primaryRole: web_frontend
       responses:
         '201':
-          description: 예약 완료
+          description: 예약·초기 설문 저장 완료
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+              example: no-store
           content:
             application/json:
               schema:
@@ -126,6 +142,215 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 error: "DUPLICATE_EMAIL"
+
+  /api/v1/reservations/{reservationId}/survey:
+    parameters:
+    - name: reservationId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    get:
+      tags:
+      - Survey
+      summary: 상세 설문 조회
+      description: 읽기는 상태를 바꾸지 않는다. 예약 성공 시 받은 ID와 토큰으로 같은 브라우저에서 이어쓴다.
+      operationId: getSurvey
+      security:
+      - surveyToken: []
+      responses:
+        '200':
+          description: '현재 저장된 설문 스냅샷. Cache-Control: no-store'
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+              example: no-store
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurveyResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: 없는 예약 또는 다른 예약의 유효 토큰. 예약 존재 여부를 노출하지 않는다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: NOT_FOUND
+        '409':
+          description: '설문 미대상(기존 예약): SURVEY_NOT_AVAILABLE. 쓰기는 completed 이후 SURVEY_COMPLETED, 버전 불일치 SURVEY_VERSION_MISMATCH도
+            반환한다.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+  /api/v1/reservations/{reservationId}/survey/draft:
+    parameters:
+    - name: reservationId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    post:
+      tags:
+      - Survey
+      summary: 상세 설문 임시 저장
+      description: answers는 부분 응답 객체지만 기존 answers 전체를 교체한다. {}도 허용하고 첫 저장 성공 시 in_progress로 전이한다. 행 잠금으로 쓰기를 직렬화하며
+        마지막 성공 저장이 우선한다.
+      operationId: saveSurveyDraft
+      security:
+      - surveyToken: []
+      responses:
+        '200':
+          description: '현재 저장된 설문 스냅샷. Cache-Control: no-store'
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+              example: no-store
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurveyResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: 없는 예약 또는 다른 예약의 유효 토큰. 예약 존재 여부를 노출하지 않는다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: NOT_FOUND
+        '409':
+          description: '설문 미대상(기존 예약): SURVEY_NOT_AVAILABLE. 쓰기는 completed 이후 SURVEY_COMPLETED, 버전 불일치 SURVEY_VERSION_MISMATCH도
+            반환한다.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SurveyWriteRequest'
+  /api/v1/reservations/{reservationId}/survey/complete:
+    parameters:
+    - name: reservationId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    post:
+      tags:
+      - Survey
+      summary: 상세 설문 완료 제출
+      description: 요청 answers 전체에 대해 해당 분기의 필수 문항을 검증하고 원자적으로 completed로 전이한다. completed 이후 재제출은 409 SURVEY_COMPLETED.
+      operationId: completeSurvey
+      security:
+      - surveyToken: []
+      responses:
+        '200':
+          description: '현재 저장된 설문 스냅샷. Cache-Control: no-store'
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+              example: no-store
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurveyResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: 없는 예약 또는 다른 예약의 유효 토큰. 예약 존재 여부를 노출하지 않는다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: NOT_FOUND
+        '409':
+          description: '설문 미대상(기존 예약): SURVEY_NOT_AVAILABLE. 쓰기는 completed 이후 SURVEY_COMPLETED, 버전 불일치 SURVEY_VERSION_MISMATCH도
+            반환한다.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SurveyWriteRequest'
+  /api/v1/reservations/{reservationId}/survey/skip:
+    parameters:
+    - name: reservationId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    post:
+      tags:
+      - Survey
+      summary: 상세 설문 건너뛰기
+      description: not_started 또는 in_progress에서 skipped로 전이하고 초안을 보존한다. skipped에서 재호출은 200(전이·이벤트 없음). skipped 후 draft/complete로
+        재개할 수 있다.
+      operationId: skipSurvey
+      security:
+      - surveyToken: []
+      responses:
+        '200':
+          description: '현재 저장된 설문 스냅샷. Cache-Control: no-store'
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+              example: no-store
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurveyResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: 없는 예약 또는 다른 예약의 유효 토큰. 예약 존재 여부를 노출하지 않는다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: NOT_FOUND
+        '409':
+          description: '설문 미대상(기존 예약): SURVEY_NOT_AVAILABLE. 쓰기는 completed 이후 SURVEY_COMPLETED, 버전 불일치 SURVEY_VERSION_MISMATCH도
+            반환한다.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SurveySkipRequest'
 
   /api/v1/admin/metrics:
     get:
@@ -158,6 +383,10 @@ paths:
 
 components:
   securitySchemes:
+    surveyToken:
+      type: http
+      scheme: bearer
+      description: 예약 성공 응답의 surveyAccessToken. URL의 reservationId에 연결된 해시와 검증하며 visitorId/sessionId는 인증 수단이 아니다.
     adminToken:
       type: http
       scheme: bearer
@@ -211,13 +440,14 @@ components:
           type: object
           additionalProperties:
             type: string
-          description: 이벤트별 식별 속성. 개인정보나 폼 입력값은 포함하지 않습니다.
+          description: 설문 이벤트는 서버 상태 전이만으로 기록하고 이 엔드포인트로 보내면 400 INVALID_REQUEST. 이벤트별 식별 속성. 개인정보나 폼 입력값은 포함하지 않습니다.
           example:
             sectionId: "why"
 
     CreateReservationRequest:
       type: object
-      required: [visitorId, sessionId, name, email, reservationType, privacyConsent]
+      additionalProperties: false
+      required: [visitorId, sessionId, name, email, reservationType, privacyConsent, jobFamily, applicantType, primaryRole]
       properties:
         visitorId:
           type: string
@@ -237,18 +467,864 @@ components:
           enum: [QUICK_AI_INTERVIEW, REVERSE_MATCHING]
         privacyConsent:
           type: boolean
+          enum: [true]
           description: 개인정보 수집·이용 동의 여부. `true`가 아니면 예약할 수 없으며, 동의 시각은 서버가 기록한다.
           example: true
+        jobFamily:
+          type: string
+          enum:
+          - FE
+          - BE
+          - AI
+          description: S-0.1 → reservations.job_family
+        applicantType:
+          type: string
+          enum:
+          - student
+          - entry_level
+          - experienced
+          - employed_no_change
+          - other
+          description: x-1.1 → reservations.applicant_type
+        primaryRole:
+          type: string
+          enum:
+          - web_frontend
+          - mobile_cross_platform
+          - design_system
+          - performance_platform
+          - interactive_graphics
+          - undecided
+          - other
+          - server_api
+          - distributed_systems
+          - data_engineering
+          - devops_sre
+          - llm_genai
+          - cv_multimodal
+          - nlp_speech
+          - recommendation_search
+          - mlops_platform
+          - robotics_edge
+          - ml_engineer
+          - research_engineer
+          description: x-2.1 → reservations.primary_role. 직군별 허용 조합은 survey-contract.md §2를
+            서버에서 검증한다.
         utm:
           $ref: '#/components/schemas/UtmParams'
 
     ReservationCreatedResponse:
       type: object
-      required: [id]
+      required: [id, surveyAccessToken, survey]
       properties:
         id:
           type: string
           format: uuid
+
+        surveyAccessToken:
+          type: string
+          pattern: '^[A-Za-z0-9_-]{43}$'
+          description: 32바이트 CSPRNG의 padding 없는 base64url. 최초 예약 성공 시에만 반환한다. 로그·이벤트·URL에 넣지 않는다.
+        survey:
+          $ref: '#/components/schemas/SurveyResponse'
+
+    SurveyAnswers:
+      type: object
+      additionalProperties: false
+      description: 문항 ID → 코드 배열/단일 코드/텍스트. 허용 직군·심화 분기·프로젝트 조건 및 none 배타 규칙은 survey-contract.md §5에 따라 서버 검증한다.
+      properties:
+        FE-3.1:
+          type: array
+          minItems: 1
+          maxItems: 7
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - javascript
+            - typescript
+            - html_css
+            - dart
+            - swift_kotlin
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        FE-3.2:
+          type: array
+          minItems: 1
+          maxItems: 10
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - react
+            - nextjs
+            - vue
+            - nuxt
+            - angular
+            - svelte
+            - react_native
+            - flutter
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        FE-4.1:
+          type: array
+          minItems: 1
+          maxItems: 8
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - web_ui
+            - admin_dashboard
+            - mobile_app
+            - design_system
+            - web_performance
+            - interaction_visualization
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        FE-5A.1:
+          type: array
+          minItems: 1
+          maxItems: 13
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - client_state
+            - server_state
+            - routing
+            - form_validation
+            - api_integration
+            - authentication
+            - realtime
+            - accessibility
+            - responsive_web
+            - i18n
+            - testing
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        FE-5B.1:
+          type: array
+          minItems: 1
+          maxItems: 11
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - native_bridge
+            - app_state
+            - navigation_deeplink
+            - push_notification
+            - local_storage
+            - hybrid_webview
+            - app_store
+            - ota_update
+            - app_performance
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        FE-5C.1:
+          type: array
+          minItems: 1
+          maxItems: 12
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - component_library
+            - storybook
+            - design_token
+            - css_in_js
+            - utility_css
+            - theme
+            - figma
+            - accessibility
+            - visual_regression
+            - package_versioning
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        FE-5D.1:
+          type: array
+          minItems: 1
+          maxItems: 12
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - core_web_vitals
+            - bundle_optimization
+            - ssr_ssg_isr
+            - rendering_optimization
+            - resource_optimization
+            - build_tool
+            - monorepo
+            - caching
+            - performance_monitoring
+            - micro_frontend
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        FE-5E.1:
+          type: array
+          minItems: 1
+          maxItems: 11
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - css_animation
+            - scroll_interaction
+            - motion_library
+            - svg
+            - canvas_2d
+            - webgl_3d
+            - data_visualization
+            - lottie
+            - animation_performance
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        FE-5F.1:
+          type: array
+          minItems: 1
+          maxItems: 12
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - publishing
+            - responsive_layout
+            - component_design
+            - state_management
+            - api_integration
+            - form
+            - routing
+            - styling_library
+            - testing
+            - git_review
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        FE-6.1:
+          type: array
+          minItems: 1
+          maxItems: 10
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - hosting
+            - cloud_cdn
+            - ci_cd
+            - docker
+            - error_monitoring
+            - analytics
+            - ab_test_feature_flag
+            - production_service
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        BE-3.1:
+          type: array
+          minItems: 1
+          maxItems: 8
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - java
+            - kotlin
+            - python
+            - javascript_typescript
+            - go
+            - csharp
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        BE-3.2:
+          type: array
+          minItems: 1
+          maxItems: 9
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - spring_boot
+            - django
+            - fastapi
+            - flask
+            - nestjs
+            - express
+            - gin_echo
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        BE-3.3:
+          type: array
+          minItems: 1
+          maxItems: 7
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - mysql_mariadb
+            - postgresql
+            - oracle
+            - mongodb
+            - redis
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        BE-4.1:
+          type: array
+          minItems: 1
+          maxItems: 7
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - server_api
+            - distributed_system
+            - data_pipeline
+            - infrastructure_devops
+            - authentication_security
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        BE-5A.1:
+          type: array
+          minItems: 1
+          maxItems: 13
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - rest_api
+            - graphql_grpc
+            - orm
+            - authentication
+            - message_queue
+            - cache
+            - async_event
+            - transaction_concurrency
+            - search_engine
+            - realtime
+            - testing
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        BE-5B.1:
+          type: array
+          minItems: 1
+          maxItems: 12
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - msa
+            - event_architecture
+            - distributed_transaction
+            - replication_sharding
+            - query_index
+            - distributed_lock
+            - rate_limiting
+            - fault_isolation
+            - load_testing
+            - high_traffic
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        BE-5C.1:
+          type: array
+          minItems: 1
+          maxItems: 12
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - etl_elt
+            - batch
+            - stream
+            - workflow
+            - warehouse
+            - lake
+            - modeling
+            - cdc
+            - log_pipeline
+            - data_quality
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        BE-5D.1:
+          type: array
+          minItems: 1
+          maxItems: 12
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - iac
+            - kubernetes
+            - ci_cd
+            - metrics
+            - logs
+            - tracing
+            - autoscaling
+            - network_load_balancing
+            - incident_oncall
+            - cloud_cost
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        BE-5E.1:
+          type: array
+          minItems: 1
+          maxItems: 11
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - crud_api
+            - db_design
+            - authentication
+            - file_storage
+            - external_api
+            - api_documentation
+            - testing
+            - deployment
+            - git_review
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        BE-6.1:
+          type: array
+          minItems: 1
+          maxItems: 10
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - docker
+            - kubernetes
+            - cloud
+            - ci_cd
+            - monitoring_logging
+            - production_service
+            - incident_response
+            - load_testing
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        AI-3.1:
+          type: array
+          minItems: 1
+          maxItems: 7
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - python
+            - c_cpp
+            - java_kotlin
+            - javascript_typescript
+            - r
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        AI-3.2:
+          type: array
+          minItems: 1
+          maxItems: 7
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - pytorch
+            - tensorflow_keras
+            - hugging_face
+            - scikit_learn
+            - xgboost_lightgbm
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        AI-4.1:
+          type: array
+          minItems: 1
+          maxItems: 11
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - llm_genai
+            - nlp
+            - speech_audio
+            - computer_vision
+            - multimodal
+            - recommendation_search
+            - mlops
+            - robotics_edge
+            - tabular_ml
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        AI-5A.1:
+          type: array
+          minItems: 1
+          maxItems: 15
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - prompt
+            - embedding
+            - vector_search
+            - rag
+            - reranking
+            - fine_tuning_sft
+            - lora_qlora
+            - agent
+            - tool_calling
+            - mcp
+            - agent_framework
+            - evaluation
+            - guardrail
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        AI-5B.1:
+          type: array
+          minItems: 1
+          maxItems: 12
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - classification
+            - detection
+            - segmentation
+            - tracking
+            - ocr
+            - pose
+            - generation
+            - vlm
+            - multimodal
+            - video
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        AI-5C.1:
+          type: array
+          minItems: 1
+          maxItems: 12
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - classification
+            - extraction
+            - semantic_search
+            - stt_asr
+            - tts
+            - speech_emotion
+            - speaker_recognition
+            - audio_classification
+            - audio_feature
+            - voice_conversion
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        AI-5D.1:
+          type: array
+          minItems: 1
+          maxItems: 12
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - collaborative_filtering
+            - content_based
+            - embedding_based
+            - learning_to_rank
+            - ctr_cvr
+            - search
+            - reranking
+            - personalization
+            - cold_start
+            - ab_test
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        AI-5E.1:
+          type: array
+          minItems: 1
+          maxItems: 13
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - experiment_tracking
+            - model_registry
+            - training_pipeline
+            - serving
+            - feature_store
+            - ci_cd
+            - monitoring
+            - drift
+            - gpu
+            - distributed_training
+            - workflow
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        AI-5F.1:
+          type: array
+          minItems: 1
+          maxItems: 14
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - perception
+            - detection_tracking
+            - sensor_fusion
+            - vlm_vla
+            - slam
+            - ros
+            - edge_inference
+            - onnx
+            - tensorrt
+            - quantization
+            - pruning
+            - realtime_optimization
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        AI-5G.1:
+          type: array
+          minItems: 1
+          maxItems: 14
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - data_collection
+            - preprocessing
+            - feature_engineering
+            - training
+            - fine_tuning
+            - hyperparameter
+            - evaluation
+            - augmentation
+            - labeling
+            - distributed_training
+            - quantization
+            - inference_optimization
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        AI-6.1:
+          type: array
+          minItems: 1
+          maxItems: 11
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - api_deployment
+            - docker
+            - kubernetes
+            - cloud
+            - experiment_tracking
+            - workflow
+            - ci_cd
+            - monitoring
+            - gpu_server
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        AI-6.2:
+          type: array
+          minItems: 1
+          maxItems: 10
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - fastapi_flask
+            - triton
+            - kserve_bentoml
+            - vllm
+            - sglang
+            - onnx_runtime
+            - tensorrt
+            - custom_serving
+            - other
+            - none
+          description: 필수(완료 시 해당 분기에 한함). none은 단독 선택.
+        FE-7.1:
+          type: string
+          enum:
+          - 'yes'
+          - 'no'
+        FE-7.2:
+          type: string
+          minLength: 1
+          maxLength: 200
+          description: 선택. 7.1=yes일 때만 허용. trim 후 Unicode 문자 수 기준.
+        FE-7.3:
+          type: string
+          minLength: 1
+          maxLength: 2000
+          description: 선택. 7.1=yes일 때만 허용. trim 후 Unicode 문자 수 기준.
+        BE-7.1:
+          type: string
+          enum:
+          - 'yes'
+          - 'no'
+        BE-7.2:
+          type: string
+          minLength: 1
+          maxLength: 200
+          description: 선택. 7.1=yes일 때만 허용. trim 후 Unicode 문자 수 기준.
+        BE-7.3:
+          type: string
+          minLength: 1
+          maxLength: 2000
+          description: 선택. 7.1=yes일 때만 허용. trim 후 Unicode 문자 수 기준.
+        AI-7.1:
+          type: string
+          enum:
+          - 'yes'
+          - 'no'
+        AI-7.2:
+          type: string
+          minLength: 1
+          maxLength: 200
+          description: 선택. 7.1=yes일 때만 허용. trim 후 Unicode 문자 수 기준.
+        AI-7.3:
+          type: string
+          minLength: 1
+          maxLength: 2000
+          description: 선택. 7.1=yes일 때만 허용. trim 후 Unicode 문자 수 기준.
+    SurveyWriteRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - surveyVersion
+      - answers
+      properties:
+        surveyVersion:
+          type: string
+          enum:
+          - v1
+        answers:
+          $ref: '#/components/schemas/SurveyAnswers'
+    SurveySkipRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - surveyVersion
+      properties:
+        surveyVersion:
+          type: string
+          enum:
+          - v1
+    SurveyResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - reservationId
+      - surveyVersion
+      - jobFamily
+      - applicantType
+      - primaryRole
+      - status
+      - answers
+      - startedAt
+      - completedAt
+      - skippedAt
+      - updatedAt
+      properties:
+        reservationId:
+          type: string
+          format: uuid
+        surveyVersion:
+          type: string
+          enum:
+          - v1
+        jobFamily:
+          type: string
+          enum:
+          - FE
+          - BE
+          - AI
+          description: S-0.1 → reservations.job_family
+        applicantType:
+          type: string
+          enum:
+          - student
+          - entry_level
+          - experienced
+          - employed_no_change
+          - other
+          description: x-1.1 → reservations.applicant_type
+        primaryRole:
+          type: string
+          enum:
+          - web_frontend
+          - mobile_cross_platform
+          - design_system
+          - performance_platform
+          - interactive_graphics
+          - undecided
+          - other
+          - server_api
+          - distributed_systems
+          - data_engineering
+          - devops_sre
+          - llm_genai
+          - cv_multimodal
+          - nlp_speech
+          - recommendation_search
+          - mlops_platform
+          - robotics_edge
+          - ml_engineer
+          - research_engineer
+          description: x-2.1 → reservations.primary_role. 직군별 허용 조합은 survey-contract.md §2를 서버에서 검증한다.
+        status:
+          type: string
+          enum:
+          - not_started
+          - in_progress
+          - completed
+          - skipped
+        answers:
+          $ref: '#/components/schemas/SurveyAnswers'
+        startedAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: 서버 시각(UTC)
+        completedAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: 서버 시각(UTC)
+        skippedAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: 서버 시각(UTC)
+        updatedAt:
+          type: string
+          format: date-time
+          nullable: false
+          description: 서버 시각(UTC)
 
     DailyFunnelRow:
       type: object
@@ -306,6 +1382,10 @@ components:
             - UNAUTHORIZED
             - DUPLICATE_EMAIL
             - INTERNAL_ERROR
+            - NOT_FOUND
+            - SURVEY_COMPLETED
+            - SURVEY_VERSION_MISMATCH
+            - SURVEY_NOT_AVAILABLE
 
   responses:
     InvalidRequest:
