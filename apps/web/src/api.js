@@ -72,7 +72,7 @@ export function track(eventName, properties = {}) {
 }
 
 // F3 — 사전예약
-export async function reserve({ name, email, reservationType }) {
+export async function reserve({ name, email, reservationType, privacyConsent }) {
   const visitorId = sessionStorage.getItem('visitor_id');
   const res = await fetch(`${BASE}/api/v1/reservations`, {
     method: 'POST',
@@ -84,7 +84,7 @@ export async function reserve({ name, email, reservationType }) {
       name,
       email,
       reservationType,
-      privacyConsentAt: new Date().toISOString(),
+      privacyConsent,
       utm: getUtm(),
     }),
   });

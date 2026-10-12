@@ -731,6 +731,16 @@
   color: var(--text-primary);
 }
 .reservation input:focus { outline: 3px solid rgba(94, 234, 212, 0.55); outline-offset: 2px; }
+.reservation-consent {
+  display: flex;
+  grid-column: 1 / -1;
+  align-items: center;
+  gap: 8px;
+  color: #cbd5e1;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.reservation-consent input { width: auto; accent-color: #5eead4; }
 .reservation button {
   min-height: 44px;
   padding: 0 16px;
