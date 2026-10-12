@@ -546,7 +546,7 @@ export default function ContentSections() {
             <div className="card fit-card" id="fitCard">
               <div className="fc-body" id="fcBody">
                 <div className="fc-h">
-                  <span className="co" id="fcCo">C</span>
+                  <span className="co" id="fcCo">A</span>
                   <div><b id="fcName">기업 A</b><small>등록한 인재상</small></div>
                 </div>
                 <ol className="prio" id="fcPrio"></ol>
