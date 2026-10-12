@@ -342,7 +342,7 @@ function useFitScroll() {
       }
     }
 
-    setCompany(2);
+    setCompany(0);
 
     function update() {
       const r = sec.getBoundingClientRect();
@@ -353,13 +353,13 @@ function useFitScroll() {
       const b = ease(seg(p, 0.27, 0.42));
       const c = ease(seg(p, 0.49, 0.63));
 
-      ideal.setAttribute('points', pts(CO[2].ideal, 1));
+      ideal.setAttribute('points', pts(CO[0].ideal, 1));
       ideal.setAttribute('stroke-dashoffset', (1 - a).toFixed(3));
       ideal.style.fillOpacity = a;
       me.setAttribute('points', pts(ME, b));
       me.style.opacity = b > 0 ? 1 : 0;
 
-      const sv = c * CO[2].s;
+      const sv = c * CO[0].s;
       if (scoreEl) {
         scoreEl.firstChild.nodeValue = Math.round(sv);
         arcEl.setAttribute('stroke-dashoffset', (100 - sv).toFixed(1));
@@ -546,8 +546,8 @@ export default function ContentSections() {
             <div className="card fit-card" id="fitCard">
               <div className="fc-body" id="fcBody">
                 <div className="fc-h">
-                  <span className="co" id="fcCo">C</span>
-                  <div><b id="fcName">기업 C</b><small>등록한 인재상</small></div>
+                  <span className="co" id="fcCo">A</span>
+                  <div><b id="fcName">기업 A</b><small>등록한 인재상</small></div>
                 </div>
                 <ol className="prio" id="fcPrio"></ol>
               </div>
@@ -557,7 +557,7 @@ export default function ContentSections() {
                   <circle className="arc" id="fitArc" cx="32" cy="32" r="26" pathLength="100" strokeDasharray="100" strokeDashoffset="100" />
                 </svg>
                 <div>
-                  <small id="fitLbl">기업 C 기준 매칭률</small>
+                  <small id="fitLbl">기업 A 기준 매칭률</small>
                   <strong id="fitScore">0<span>%</span></strong>
                 </div>
               </div>

@@ -10,3 +10,9 @@ apps/web/.env.local
 apps/api/.gradle/
 apps/api/build/
 apps/api/HELP.md
+
+# Build output
+apps/web/dist/
+
+# Supabase
+supabase/.temp/
