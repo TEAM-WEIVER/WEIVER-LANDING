@@ -68,7 +68,7 @@
 
 ## 4. API와 상태 전이
 
-모든 경로의 prefix는 `/api/v1/reservations/{reservationId}/survey`다. 쓰기는 POST를 사용해 현재 CORS의 GET/POST 허용 범위에 맞춘다. 모든 성공 응답은 `200`과 아래의 동일한 설문 스냅샷이며 예약 생성만 `201`이다. JSON 외의 임의 필드는 `400 INVALID_REQUEST`다.
+모든 경로의 prefix는 `/api/v1/reservations/{reservationId}/survey`다. 쓰기는 POST를 사용해 현재 CORS의 GET/POST 허용 범위에 맞춘다. 모든 성공 응답은 `200`과 아래의 동일한 설문 스냅샷이며 예약 생성만 `201`이다. 요청 스키마에 정의되지 않은 추가 필드는 `400 INVALID_REQUEST`다.
 
 | Method / suffix | 요청 | 동작 |
 | --- | --- | --- |
