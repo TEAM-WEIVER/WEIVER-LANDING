@@ -1,0 +1,15 @@
+/* Dark introduction theme; product illustrations retain their own contrast. */
+:root { --bg: #101114; }
+body { background: #101114; }
+.content {
+  --ink: #f8fafc; --muted: #cbd5e1; --line: #34383f;
+  background: #101114; color: var(--ink);
+}
+.content .card, .content .cal, .content .inbox {
+  --ink: #111827; --muted: #4b5563; --line: #e2e8f0; --surface: #fff;
+  color: var(--ink);
+}
+.ch-label, .ch-label span, .chapter .q, .chapter.solved .q { color: #f8fafc; }
+.sol-label, .fit-h em, .radar2 text.pri { color: #5eead4; fill: #5eead4; }
+.sol-text, .fit-h, .fit-cap b, .j-h, .j-item h3 { color: #f8fafc; }
+.fit-cap p, .j-item p, .legend, .lead .tagline { color: #cbd5e1; }
