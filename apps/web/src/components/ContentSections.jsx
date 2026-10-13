@@ -416,7 +416,7 @@ export default function ContentSections() {
           <p className="tagline">기업이 먼저 찾는 역매칭 구직 서비스</p>
           <h1>한 번 준비하고, 여러 기업에게 먼저 제안받으세요.</h1>
           <p className="desc">
-            기업마다 반복하던 서류와 면접 준비는 이제 한 번으로. 나의 역량을 등록하면, 기업이 먼저 컨택합니다.
+            기업마다 반복하던 서류와 면접 준비는 이제 한 번으로. <br />나의 역량을 등록하면, 기업이 먼저 컨택합니다.
           </p>
           <div className="ctas">
             <Button asChild><a
