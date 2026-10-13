@@ -5,7 +5,7 @@ const ID = '770e8400-e29b-41d4-a716-446655440002';
 const TOKEN = 'A'.repeat(43);
 const KEY = `weiver.survey.v1.${ID}`;
 
-async function setup(page, { rejectStorage = false, duplicate = false } = {}) {
+async function setup(page, { rejectStorage = false, duplicate = false, bootstrapGate = null } = {}) {
   const reservations = [];
   const events = [];
   if (rejectStorage) {
@@ -21,6 +21,7 @@ async function setup(page, { rejectStorage = false, duplicate = false } = {}) {
     const path = new URL(route.request().url()).pathname;
     const body = route.request().postDataJSON();
     if (path.endsWith('/bootstrap')) {
+      if (bootstrapGate) await bootstrapGate;
       await route.fulfill({ json: { visitorId: '550e8400-e29b-41d4-a716-446655440000' } });
     } else if (path.endsWith('/events')) {
       events.push(body);
@@ -220,4 +221,19 @@ test('custom dropdown validates missing values and supports keyboard selection a
   await expect(role).toHaveText('웹 성능 / 프론트엔드 플랫폼 (SSR, 빌드, 인프라)');
   const box = await role.boundingBox();
   expect(box.x + box.width).toBeLessThanOrEqual(page.viewportSize().width);
+});
+
+
+test('fast submission waits for visitor initialization before saving a reservation', async ({ page }) => {
+  let finish;
+  const bootstrapGate = new Promise((resolve) => { finish = resolve; });
+  const { reservations } = await setup(page, { bootstrapGate });
+  await fill(page);
+  await submit(page);
+  await expect(page.getByRole('button', { name: '제출 중...' })).toBeDisabled();
+  expect(reservations).toHaveLength(0);
+  finish();
+  await expect(page.locator('.reservation-message[role="status"]')).toContainText('사전예약이 완료됐습니다');
+  expect(reservations).toHaveLength(1);
+  expect(reservations[0].visitorId).toBe('550e8400-e29b-41d4-a716-446655440000');
 });
