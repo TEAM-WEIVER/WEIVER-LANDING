@@ -1,3 +1,4 @@
+import { publicAsset } from '../../../public-asset.js';
 import { useEffect, useRef } from 'react';
 import RadarChart from '../RadarChart';
 
@@ -28,7 +29,7 @@ export default function Scene4({ onEnter }) {
         <RadarChart />
         <div>
           <div className="who">
-            <img src="/avatar.jpg" alt="" />
+            <img src={publicAsset("avatar.jpg")} alt="" />
             <div><b>김위버</b><small>신입 · 서비스 기획</small></div>
             <span className="stamp">AI 면접 완료</span>
           </div>

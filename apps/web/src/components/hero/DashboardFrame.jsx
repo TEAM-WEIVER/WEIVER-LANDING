@@ -1,3 +1,4 @@
+import { publicAsset } from '../../public-asset.js';
 import { useEffect, useRef } from 'react';
 
 export default function DashboardFrame() {
@@ -48,7 +49,7 @@ export default function DashboardFrame() {
           aria-label="개인 대시보드: 이력서, 자기소개서, 포트폴리오 작성 완료. AI 서류분석과 AI 면접 완료, 기업 매칭 진행 중"
         >
           <div className="d-side" aria-hidden="true">
-            <img src="/app-icon.png" alt="" />
+            <img src={publicAsset("app-icon.png")} alt="" />
             <span className="d-nav">
               <svg viewBox="0 0 24 24">
                 <path d="M3 5a2 2 0 012-2h6v8H3zM13 3h6a2 2 0 012 2v4h-8zM13 11h8v8a2 2 0 01-2 2h-6zM3 13h8v8H5a2 2 0 01-2-2z" fill="#fff" />
@@ -65,7 +66,7 @@ export default function DashboardFrame() {
           </div>
           <div className="d-main">
             <div className="d-card d-prof">
-              <img className="d-ava" src="/avatar.jpg" alt="" />
+              <img className="d-ava" src={publicAsset("avatar.jpg")} alt="" />
               <div className="d-id">
                 <b>김위버님</b>
                 <span>

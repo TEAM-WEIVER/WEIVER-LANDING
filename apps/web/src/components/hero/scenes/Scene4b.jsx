@@ -1,3 +1,4 @@
+import { publicAsset } from '../../../public-asset.js';
 import DashboardFrame from '../DashboardFrame';
 
 export default function Scene4b() {
@@ -5,7 +6,7 @@ export default function Scene4b() {
     <>
       <div className="frame center">
         <div className="bar">
-          <img src="/favicon.png" alt="" />weiver 개인 대시보드
+          <img src={publicAsset("favicon.png")} alt="" />weiver 개인 대시보드
         </div>
         <DashboardFrame />
       </div>

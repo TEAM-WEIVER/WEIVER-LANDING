@@ -36,7 +36,22 @@ where job_family is null and applicant_type is null and primary_role is null;
 
 GitHub에서 건너뛴 workflow를 재실행할 때는 Deploy run의 전체 재실행을 사용한다(API와 웹의 순서 유지). 변수 false 상태에서는 새 API뿐 아니라 웹도 배포하지 않으므로 DB 준비 확인 전 병합하는 경우 현재 서비스를 그대로 유지한다.
 
+### 병합 전 후보 API 검증
+
+2026-10-13 Preview 검증에서는 테스트한 `cb30207`의 Java 24 JAR로 arm64 이미지 `weiver-landing-api:candidate-cb30207`을 만들고 Oracle에 로드했다. `~/weiver/docker-compose.candidate.yml`이 API 이미지만 지정하며 기존 DB 연결은 `.env`에서 유지한다. 후보 API를 재시작할 때는 해당 파일을 함께 사용한다.
+
+```sh
+cd ~/weiver
+docker compose -f docker-compose.yml -f docker-compose.candidate.yml up -d --force-recreate api
+```
+
+기존 단일 Origin 구현의 main Deploy를 다시 실행하면 복수 Origin 설정을 처리하지 못하는 이전 API와 이전 웹 빌드로 후보를 덮어쓸 수 있다. 체크리스트 검증과 PR 병합 후 **복수 Origin 지원을 포함한 최신 main 커밋**을 배포한다. 정상 main 배포는 기본 compose 파일을 사용해 후보 이미지를 정식 이미지로 전환한다. Preview Origin은 검증 종료 후 제거한다. 후보 전환 전 `.env` 백업과 기존 API image ID도 Oracle에 보관했다.
+
 ## 활성 제출 경로 확인
+
+- 새 운영 주소는 `https://weiverai.com/`, 랜딩 API는 `https://landing-api.weiverai.com`이다. React 빌드의 JS/CSS/이미지·favicon은 `/landing-assets/` 경로를 사용한다. `landing-origin.weiverai.com` Nginx는 해당 접두사를 제거해 `/var/www/weiver` 파일을 제공한다. 본품 Vercel에서 `/`와 `/landing-assets/*`만 이 원본으로 rewrite해야 하며 `/login`, `/_next/*`, `/api/auth/*`는 본품에 남긴다.
+- GitHub `LANDING_API_URL=https://landing-api.weiverai.com`과 Oracle `WEB_ALLOWED_ORIGIN=https://weiverai.com`을 함께 설정한다. 런타임 `.env` 변경 후 API 컨테이너를 재생성하고 새 origin의 preflight를 확인한다. Preview에서 실제 예약을 검증할 때는 `WEB_ALLOWED_ORIGIN`에 운영 주소와 검증할 Preview의 정확한 origin을 쉼표로 함께 지정할 수 있다. 공백은 제거되고 등록한 주소만 허용한다. `*.vercel.app` 전체를 허용하지 않으며 검증이 끝나면 Preview 주소를 제거하고 컨테이너를 재생성한다. 원본 도메인의 화면 접근 확인은 공개 도메인의 CORS·예약 검증을 대체하지 않는다.
+- 기존 IP 주소에서 저장한 이어쓰기 토큰은 브라우저 origin이 달라 새 도메인에서 자동 복구되지 않는다. 저장소 데이터를 새 도메인으로 자동 복사하거나 URL에 토큰을 붙이지 않는다.
 
 - OCI main push 배포는 `npm run build:web`의 `apps/web/dist`를 `/var/www/weiver`로 복사한다. 따라서 실제 API 제출 경로는 React의 `DemoSection.jsx` → `api.js`다.
 - 루트 `index.html`은 Vercel 정적 진입 경로다. 현재 폼은 저장 API를 호출하지 않고 “입력 정보는 저장되지 않습니다” 안내를 표시하는 미리보기다. 예약 완료 이벤트도 발행하지 않는다. strict 검증을 활성화해도 이 폼의 예약 요청은 없으며, 실제 수집 채널로 사용할 경우 React 앱으로 연결/전환한 후 활성화해야 한다.

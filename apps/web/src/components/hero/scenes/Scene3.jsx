@@ -1,12 +1,13 @@
+import { publicAsset } from '../../../public-asset.js';
 export default function Scene3() {
   return (
     <>
       <div className="frame center">
         <div className="bar">
-          <img src="/favicon.png" alt="" />weiver AI 면접
+          <img src={publicAsset("favicon.png")} alt="" />weiver AI 면접
         </div>
         <div className="shot">
-          <img src="/interview.jpg" alt="weiver AI 면접 진행 화면" />
+          <img src={publicAsset("interview.jpg")} alt="weiver AI 면접 진행 화면" />
         </div>
       </div>
       <div className="uploaded card">
