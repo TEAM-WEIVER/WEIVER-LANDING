@@ -432,8 +432,8 @@ export default function ContentSections() {
             </a></Button>
             <Button asChild><a
               className="btn btn-lg btn-ghost"
-              href="#how"
-              onClick={(e) => { e.preventDefault(); scrollTo('#how'); }}
+              href="#ch1"
+              onClick={(e) => { e.preventDefault(); scrollTo('#ch1'); }}
             >서비스 알아보기</a></Button>
           </div>
         </section>
