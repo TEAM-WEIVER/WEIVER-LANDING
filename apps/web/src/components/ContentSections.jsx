@@ -1,7 +1,6 @@
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
-import { Separator } from './ui/separator';
 import { useEffect, useRef } from 'react';
 import DemoSection from './DemoSection';
 import { track } from '../api';
@@ -641,12 +640,11 @@ export default function ContentSections() {
         </div>
       </section>
 
+      {/* demo + reservation: a full-width light section */}
+      <DemoSection />
       <div className="wrap">
-        {/* demo + reservation */}
-        <DemoSection />
 
         {/* footer */}
-        <Separator className="footer-separator" />
         <footer>
           <span className="logo" role="img" aria-label="weiver" style={{ height: '18px', color: 'var(--ink)', display: 'block', marginBottom: '10px' }} />
           한 번의 준비로, 더 많은 가능성을.

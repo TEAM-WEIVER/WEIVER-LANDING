@@ -1,0 +1,47 @@
+/* A light application section across the full page width. */
+.demo {
+  --surface: #fff; --ink: #111827; --muted: #4b5563; --line: #d1d5db;
+  --btn: #111827; --btn-ink: #fff; --hi: #0f766e;
+  background: #fff; color: #111827; padding: 88px 0;
+}
+.demo-inner { max-width: 1040px; margin: 0 auto; padding: 0 clamp(20px,5vw,40px); }
+.demo h2 { color: #111827; max-width: 22ch; }
+.demo-head > p { color: #4b5563; }
+.demo-choice-label { margin: 36px 0 0; font-weight: 600; font-size: 1rem; }
+.demo-options { margin-top: 16px; margin-bottom: 28px; }
+.demo-option { border: 2px solid #d1d5db; background: #fff; padding: 24px; box-shadow: none; }
+.demo-option:hover { border-color: #6b7280; background: #f9fafb; }
+.demo-option[aria-checked="true"] { border-color: #111827; background: #f3f4f6; box-shadow: none; }
+.demo-option strong { padding-right: 0; }
+.demo-option small, .demo-option em { color: #4b5563; }
+.option-selection { position: absolute; top: 24px; right: 24px; display: flex; align-items: center; gap: 7px; font-size: 0.8rem; color: #4b5563; font-weight: 600; }
+.option-radio { display: grid; place-items: center; width: 22px; height: 22px; border: 1.5px solid #6b7280; border-radius: 50%; background: #fff; }
+.demo-option[aria-checked="true"] .option-selection { color: #111827; }
+.demo-option[aria-checked="true"] .option-radio { background: #111827; border-color: #111827; color: #fff; }
+.demo .reservation { --ink: #111827; --muted: #4b5563; background: #f8fafc; color: #111827; border: 1px solid #e2e8f0; padding: 28px; }
+.reservation-copy p, .demo .reservation-note { color: #4b5563; }
+.demo .reservation [data-slot="field-label"], .demo .reservation-survey legend { color: #111827; }
+.demo .reservation [data-slot="field-label"] small { color: #4b5563; }
+.demo .reservation [data-slot="input"], .demo .reservation [data-slot="select-trigger"] { background: #fff; border: 1px solid #cbd5e1; }
+.demo .reservation [data-slot="select-trigger"][aria-invalid="true"] { border-color: #b91c1c; }
+.demo .reservation [data-slot="field-error"], .demo .reservation .consent-error { color: #b91c1c; }
+.demo .reservation [data-slot="checkbox"] { background: #fff; color: #fff; border-color: #6b7280; }
+.demo .reservation [data-slot="checkbox"][data-state="checked"] { background: #111827; border-color: #111827; }
+.demo .reservation .reservation-submit { background: #111827; color: #fff; padding: 0 24px; min-height: 48px; }
+.demo .reservation .reservation-submit:hover { background: #374151; }
+.demo .reservation .reservation-message { background: #ecfdf5; color: #065f46; border-color: #a7f3d0; }
+.demo .reservation .reservation-message[data-variant="destructive"] { background: #fef2f2; color: #991b1b; border-color: #fecaca; }
+.reservation-select-content { --ink: #111827; --surface: #fff; --line: #e2e8f0; --muted: #4b5563; background: #fff; color: #111827; }
+footer .logo { color: #f8fafc !important; }
+@media (max-width: 760px) {
+  .demo { padding: 64px 0; }
+  .demo .reservation { padding: 20px; }
+  .demo h2 { max-width: 20ch; }
+}
+
+.site-head.on-light { background: rgba(255,255,255,0.97); border-bottom: 1px solid #e2e8f0; }
+.site-head.on-light .wordmark { color: #111827; }
+.site-head.on-light .btn-sm { background: #111827; color: #fff; }
+
+
+.content > .wrap:last-child footer { padding-top: 64px; border-top: 0; }

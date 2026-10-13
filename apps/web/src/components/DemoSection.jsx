@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { Check } from 'lucide-react';
 import { rememberSurveyReservation, reserve, track } from '../api';
 import { APPLICANT_TYPES, JOB_FAMILIES, PRIMARY_ROLES } from '../survey-options';
 import { Button } from './ui/button';
@@ -75,15 +76,21 @@ export default function DemoSection() {
   const selectedOption = OPTIONS.find((o) => o.id === selected);
   return (
     <section className="demo" id="reserve" aria-labelledby="demo-title" data-section-id="reserve">
+      <div className="demo-inner">
       <div className="demo-head">
         <div><h2 id="demo-title">나에게 맞는 방식으로 <span className="logo" role="img" aria-label="weiver" style={{ display: 'inline-block', height: '0.85em', verticalAlign: 'middle', color: 'currentColor' }} />를 먼저 경험해 보세요.</h2></div>
         <p>두 가지 방식 중 하나를 선택해 AI 면접과 역량 검증 과정을 먼저 경험할 수 있어요.</p>
       </div>
+      <p className="demo-choice-label">체험 방식을 선택해주세요</p>
       <RadioGroup className="demo-options" aria-label="데모 참여 방식" value={selected} onValueChange={setSelected} disabled={status === 'loading'}>
         {OPTIONS.map((opt) => (
           <Card key={opt.id} asChild presentation>
             <RadioGroupItem value={opt.id} className="demo-option" data-option={opt.id}>
               <Badge className={`badge${opt.badgeClass ? ` ${opt.badgeClass}` : ''}`}>{opt.badge}</Badge>
+              <span className="option-selection" aria-hidden="true">
+                <span className="option-radio">{selected === opt.id && <Check size={14} strokeWidth={3} />}</span>
+                {selected === opt.id ? '선택됨' : '선택하기'}
+              </span>
               <strong>{opt.title}</strong><small>{opt.sub}</small><em>{opt.desc}</em>
             </RadioGroupItem>
           </Card>
@@ -144,6 +151,7 @@ export default function DemoSection() {
         {status === 'error' && <Alert variant="destructive" className="reservation-message show"><AlertDescription>오류가 발생했습니다. 잠시 후 다시 시도해 주세요.</AlertDescription></Alert>}
         <FieldDescription className="reservation-note">개인정보는 weiver 서비스 출시 안내 목적으로만 사용됩니다.</FieldDescription>
       </Card>
+      </div>
     </section>
   );
 }

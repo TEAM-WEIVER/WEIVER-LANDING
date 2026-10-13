@@ -12,8 +12,11 @@ test('hero pause and header reservation CTA keep their behavior', async ({ page 
   await expect(page.getByRole('button', { name: '영상 재생' })).toHaveAttribute('aria-pressed', 'true');
   await page.getByRole('button', { name: '영상 재생' }).click();
   await expect(pause).toHaveAttribute('aria-pressed', 'false');
+  // A shorter window lets the light section reach the fixed header on desktop too.
+  await page.setViewportSize({ ...page.viewportSize(), height: 650 });
   await page.locator('.site-head').getByRole('link', { name: '사전예약', exact: true }).click();
   await expect(page.locator('#demo-title')).toBeInViewport();
+  await expect(page.locator('.site-head')).toHaveClass(/on-light/);
   await expect(page.locator('.lead .desc')).toHaveText('기업마다 반복하던 서류와 면접 준비는 이제 한 번으로. 나의 역량을 등록하면, 기업이 먼저 컨택합니다.');
 });
 

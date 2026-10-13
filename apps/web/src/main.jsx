@@ -8,6 +8,7 @@ import './styles/hero.css';
 import './styles/scenes.css';
 import './styles/content.css';
 import './styles/landing-theme.css';
+import './styles/reservation.css';
 import App from './App';
 
 createRoot(document.getElementById('root')).render(
