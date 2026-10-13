@@ -721,7 +721,7 @@
   gap: 10px;
   align-items: center;
 }
-.reservation input,
+.reservation input:not([type="checkbox"]):not([type="radio"]),
 .reservation select {
   width: 100%;
   min-height: 44px;
@@ -731,7 +731,7 @@
   font: inherit;
   color: var(--text-primary);
 }
-.reservation input:focus, .reservation select:focus { outline: 3px solid rgba(94, 234, 212, 0.55); outline-offset: 2px; }
+.reservation input:not([type="checkbox"]):not([type="radio"]):focus, .reservation select:focus { outline: 3px solid rgba(94, 234, 212, 0.55); outline-offset: 2px; }
 .reservation-consent {
   display: flex;
   grid-column: 1 / -1;
@@ -789,3 +789,49 @@ footer { padding: 28px 0 48px; color: #cbd5e1; font-size: 0.85rem; border-top: 1
   .demo-head { display: block; }
   .demo-head > p { margin-top: 18px; }
 }
+
+/* Shared controls use the landing's existing brand and responsive layout. */
+.btn[data-slot="button"] { height: auto; }
+.demo-option[data-slot="card"] { width: 100%; height: auto; aspect-ratio: auto; }
+.demo-option:disabled { opacity: 0.65; cursor: wait; }
+.reservation [data-slot="field"] { min-width: 0; gap: 6px; }
+.reservation [data-slot="field-label"] { font-size: 0.85rem; color: #e2e8f0; font-weight: 500; }
+.reservation [data-slot="field-label"] small { color: #cbd5e1; }
+.reservation [data-slot="native-select-wrapper"] { width: 100%; }
+.reservation [data-slot="native-select-icon"] { color: var(--text-primary); }
+.reservation [data-slot="input"] { background: white; }
+.reservation [data-slot="native-select"] { padding-right: 36px; }
+.reservation [data-slot="checkbox"] {
+  width: 20px; height: 20px; min-height: 20px; padding: 0; flex: none;
+  border: 1px solid #94a3b8; border-radius: 5px; background: transparent; color: #042f2e;
+}
+.reservation [data-slot="checkbox"][data-state="checked"] { background: var(--teal); border-color: var(--teal); }
+.reservation [data-slot="checkbox"]:disabled { cursor: wait; }
+.reservation-consent [data-slot="field-label"] { cursor: pointer; font-size: 0.8rem; }
+.reservation .reservation-message { background: rgba(15, 23, 42, 0.35); border: 1px solid rgba(94, 234, 212, 0.35); padding: 14px 16px; }
+.reservation .reservation-message[data-variant="destructive"] { color: #fecaca; }
+.reservation .reservation-message [data-slot="alert-description"] { color: inherit; }
+.reservation .consent-error { grid-column: 1 / -1; color: #fecaca; }
+footer { border-top: 0; }
+
+.reservation-survey [data-slot="field-label"] { display: flex; align-items: baseline; gap: 4px; }
+/* Clip horizontal illustration spill without creating a vertical scroll container. */
+.content { overflow-x: clip; }
+
+/* Custom Select's trigger and portal popup share the same field theme. */
+.reservation [data-slot="select-trigger"] {
+  width: 100%; min-width: 0; height: auto; min-height: 44px; padding: 10px 12px;
+  border: 1px solid var(--line); background: white; color: var(--text-primary);
+  font-weight: 400; white-space: normal; text-align: left;
+}
+.reservation [data-slot="select-trigger"][data-placeholder] { color: #64748b; }
+.reservation [data-slot="select-trigger"]:disabled { cursor: not-allowed; }
+.reservation [data-slot="select-trigger"][aria-invalid="true"] { border-color: #fca5a5; }
+.reservation [data-slot="select-value"] { display: block; flex: 1; min-width: 0; white-space: normal; line-height: 1.45; }
+.reservation-select-content {
+  z-index: 200; width: var(--radix-select-trigger-width); max-width: calc(100vw - 32px);
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink); font-family: var(--font);
+}
+.reservation-select-content [data-slot="select-item"] { min-height: 40px; white-space: normal; line-height: 1.5; }
+.reservation-select-content [data-slot="select-item"][data-highlighted] { background: var(--line); color: var(--ink); }
+.reservation-select-content [data-slot="select-item"][data-state="checked"] { font-weight: 600; }

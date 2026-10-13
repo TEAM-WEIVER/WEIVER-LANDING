@@ -1,0 +1,34 @@
+/* Text first, illustration second, with longer scroll intervals. */
+.chapter .q { transform: none; }
+.sol { opacity: var(--copy, 0); transform: none; }
+.j-stage { --step: var(--visual-step, 0); }
+
+/* More reading/holding distance per journey step; keep native scrolling. */
+.journey { height: 1100svh; }
+@media (max-width: 760px) { .journey { height: 980svh; } }
+
+/* Chapters 02 and 03 retain their phases over a longer scroll distance. */
+#ch2, #ch3 { height: 410svh; }
+@media (max-width: 760px) { #ch2, #ch3 { height: 360svh; } }
+
+.fit-cap { transform: none; transition: opacity 0.25s; }
+/* Desktop reveals paragraphs cumulatively; reserved rows prevent layout jumps. */
+@media (min-width: 761px) {
+  .fit-h { margin-bottom: 24px; }
+  .fit-caps { gap: 18px; }
+  .fit-cap, .fit-cap.on {
+    grid-area: auto; display: grid; grid-template-columns: 32px minmax(0,1fr);
+    column-gap: 12px; row-gap: 4px; opacity: 0; visibility: hidden; transform: translateY(8px);
+    transition: opacity 0.35s, transform 0.35s, visibility 0s 0.35s;
+  }
+  .fit-cap span {
+    grid-column: 1; grid-row: 1 / 3; align-self: start;
+    display: grid; place-items: center; width: 32px; height: 32px;
+    margin: 0; padding: 0; border-radius: 50%; color: #cbd5e1;
+  }
+  .fit-cap.revealed { opacity: 1; visibility: visible; transform: none; transition: opacity 0.35s, transform 0.35s, visibility 0s; }
+  .fit-cap b { grid-column: 2; font-size: clamp(1rem,1.3vw,1.15rem); line-height: 1.45; }
+  .fit-cap p { grid-column: 2; margin: 0; font-size: 0.9rem; line-height: 1.6; }
+}
+
+@media (min-width: 761px) and (prefers-reduced-motion: reduce) { .fit-cap, .fit-cap.revealed { transition: none; transform: none; } }

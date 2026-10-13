@@ -1,3 +1,6 @@
+import { Button } from './ui/button';
+import { Card } from './ui/card';
+import { Badge } from './ui/badge';
 import { useEffect, useRef } from 'react';
 import DemoSection from './DemoSection';
 import { track } from '../api';
@@ -40,16 +43,11 @@ function useChaptersScroll() {
     const ease = (t) => t * t * (3 - 2 * t);
     const chapters = Array.from(document.querySelectorAll('.chapter'));
 
-    // 단어별 opacity 애니메이션용 span 삽입
+    // Keep questions fully readable before illustration movement begins.
     chapters.forEach((ch) => {
-      const q = ch.querySelector('.q');
-      q.innerHTML = q.textContent
-        .split(' ')
-        .map((w) => `<span class="w">${w}</span>`)
-        .join(' ');
-      ch._words = q.querySelectorAll('.w');
       ch._ics = ch.querySelectorAll('.solcard .ic');
     });
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // ch1: 자소서 질문 카드
     const QS = [
@@ -164,15 +162,13 @@ function useChaptersScroll() {
         const r = ch.getBoundingClientRect();
         if (r.bottom < -vh || r.top > vh * 1.5) return;
         const p = clamp(-r.top / (ch.offsetHeight - vh));
-        const a = seg(p, 0.02, 0.36);
-        const b = seg(p, 0.44, 0.6);
-        const c = seg(p, 0.58, 0.76);
-        const n = ch._words.length;
-        ch._words.forEach((w, i) => {
-          w.style.opacity = (0.12 + 0.88 * clamp(a * (n + 1) - i)).toFixed(3);
-        });
+        const a = reduce ? 1 : seg(p, 0.18, 0.46);
+        const b = reduce ? 1 : seg(p, 0.52, 0.66);
+        const c = reduce ? 1 : seg(p, 0.73, 0.9);
+        const copy = reduce ? 1 : seg(p, 0.56, 0.66);
         ch.style.setProperty('--b', ease(b).toFixed(3));
         ch.style.setProperty('--c', ease(c).toFixed(3));
+        ch.style.setProperty('--copy', ease(copy).toFixed(3));
         ch.classList.toggle('solved', b > 0.5);
         ch._ics.forEach((ic, i) => {
           ic.style.setProperty('--s', ease(clamp(c * 4 - i - 0.5)).toFixed(3));
@@ -196,6 +192,7 @@ function useChaptersScroll() {
     return () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', update);
+      cards1.forEach((card) => card.remove());
     };
   }, []);
 }
@@ -216,17 +213,24 @@ function useJourneyScroll() {
       }
     }
 
-    let cur = -1;
+    let cur = -1, visual = -1;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     function update() {
       const r = j.getBoundingClientRect();
       const total = j.offsetHeight - window.innerHeight;
       const p = Math.min(Math.max(-r.top / total, 0), 0.999);
       const step = Math.floor(p * 4);
-      if (step === cur) return;
-      cur = step;
-      j.setAttribute('data-step', step);
-      j.style.setProperty('--step', step);
-      items.forEach((el, i) => el.classList.toggle('on', i === step));
+      if (step !== cur) {
+        cur = step;
+        j.style.setProperty('--step', step);
+        items.forEach((el, i) => el.classList.toggle('on', i === step));
+      }
+      const nextVisual = reduce || p * 4 - step >= 0.25 ? step : Math.max(0, step - 1);
+      if (visual !== nextVisual) {
+        visual = nextVisual;
+        j.setAttribute('data-step', visual);
+        j.style.setProperty('--visual-step', visual);
+      }
     }
 
     function onScroll() { requestAnimationFrame(update); }
@@ -263,6 +267,7 @@ function useFitScroll() {
     const NS = 'http://www.w3.org/2000/svg';
     const svg = document.getElementById('radar2');
     if (!svg) return;
+    svg.replaceChildren();
 
     function pt(i, r) {
       const a = -Math.PI / 2 + (i * Math.PI) / 3;
@@ -349,9 +354,9 @@ function useFitScroll() {
       const vh = window.innerHeight;
       if (r.bottom < -vh || r.top > vh * 1.5) return;
       const p = clamp(-r.top / (sec.offsetHeight - vh));
-      const a = ease(seg(p, 0.03, 0.2));
-      const b = ease(seg(p, 0.27, 0.42));
-      const c = ease(seg(p, 0.49, 0.63));
+      const a = ease(seg(p, 0.1, 0.22));
+      const b = ease(seg(p, 0.34, 0.45));
+      const c = ease(seg(p, 0.57, 0.65));
 
       ideal.setAttribute('points', pts(CO[0].ideal, 1));
       ideal.setAttribute('stroke-dashoffset', (1 - a).toFixed(3));
@@ -375,7 +380,10 @@ function useFitScroll() {
       const cap = p < 0.24 ? 0 : p < 0.46 ? 1 : p < 0.67 ? 2 : 3;
       if (cap !== curCap) {
         curCap = cap;
-        caps.forEach((el, k) => el.classList.toggle('on', k === cap));
+        caps.forEach((el, k) => {
+          el.classList.toggle('on', k === cap);
+          el.classList.toggle('revealed', k <= cap);
+        });
       }
     }
 
@@ -410,23 +418,23 @@ export default function ContentSections() {
         {/* lead */}
         <section className="lead" id="lead" data-section-id="lead">
           <p className="tagline">기업이 먼저 찾는 역매칭 구직 서비스</p>
-          <h1>한 번 준비하고, 여러 기업에게 먼저 제안받으세요.</h1>
+          <h1>한 번 준비하고,<br />여러 기업에게<br />먼저 제안받으세요.</h1>
           <p className="desc">
-            기업마다 반복하던 서류와 면접 준비는 이제 한 번으로. 나의 역량을 등록하면, 기업이 먼저 나를 찾습니다.
+            기업마다 반복하던 서류와 면접 준비는 이제 한 번으로. <br />나의 역량을 등록하면, 기업이 먼저 컨택합니다.
           </p>
           <div className="ctas">
-            <a
+            <Button asChild><a
               className="btn btn-lg btn-primary"
               href="#reserve"
               onClick={(e) => { e.preventDefault(); scrollTo('section.demo'); handleCtaClick('lead_reserve', 'lead'); }}
             >
               데모 사전예약하기
-            </a>
-            <a
+            </a></Button>
+            <Button asChild><a
               className="btn btn-lg btn-ghost"
-              href="#how"
-              onClick={(e) => { e.preventDefault(); scrollTo('#how'); }}
-            >서비스 알아보기</a>
+              href="#ch1"
+              onClick={(e) => { e.preventDefault(); scrollTo('#ch1'); }}
+            >서비스 알아보기</a></Button>
           </div>
         </section>
       </div>
@@ -444,14 +452,14 @@ export default function ContentSections() {
               </div>
             </div>
             <div className="ch-vis" id="vis1">
-              <div className="card vcard solcard complete-s">
+              <Card presentation className="card vcard solcard complete-s">
                 <b className="ttl">프로필 완성도</b>
                 <div className="tiles">
-                  <div className="tile"><b>이력서</b><small className="st-done">작성완료</small><i className="ic ok"></i></div>
-                  <div className="tile"><b>자기소개서</b><small className="st-done">작성완료</small><i className="ic ok"></i></div>
-                  <div className="tile"><b>포트폴리오</b><small className="st-done">작성완료</small><i className="ic ok"></i></div>
+                  <div className="tile"><b>이력서</b><Badge asChild variant="secondary"><small className="st-done">작성완료</small></Badge><i className="ic ok"></i></div>
+                  <div className="tile"><b>자기소개서</b><Badge asChild variant="secondary"><small className="st-done">작성완료</small></Badge><i className="ic ok"></i></div>
+                  <div className="tile"><b>포트폴리오</b><Badge asChild variant="secondary"><small className="st-done">작성완료</small></Badge><i className="ic ok"></i></div>
                 </div>
-              </div>
+              </Card>
             </div>
           </div>
         </article>
@@ -467,19 +475,19 @@ export default function ContentSections() {
               </div>
             </div>
             <div className="ch-vis" id="vis2">
-              <div className="cal vcard">
+              <Card presentation className="cal vcard">
                 <div className="cal-h"><b>이번 달 채용 일정</b><small>인적성 · 면접 · 과제</small></div>
                 <div className="cal-g" id="calg"></div>
                 <span className="cal-count" id="calc">0건</span>
-              </div>
-              <div className="card vcard solcard flow-s">
+              </Card>
+              <Card presentation className="card vcard solcard flow-s">
                 <b className="ttl">AI 채용 프로세스</b>
                 <div className="tiles">
-                  <div className="tile"><i className="ic ok"></i><div><b>AI 서류분석</b><small className="st-done">분석 완료</small></div></div>
-                  <div className="tile focus"><i className="ic ok"></i><div><b>AI 면접</b><small className="st-done">1회로 완료</small></div></div>
-                  <div className="tile"><i className="ic live"></i><div><b>기업 매칭</b><small className="st-live">진행중</small></div></div>
+                  <div className="tile"><i className="ic ok"></i><div><b>AI 서류분석</b><Badge asChild variant="secondary"><small className="st-done">분석 완료</small></Badge></div></div>
+                  <div className="tile focus"><i className="ic ok"></i><div><b>AI 면접</b><Badge asChild variant="secondary"><small className="st-done">1회로 완료</small></Badge></div></div>
+                  <div className="tile"><i className="ic live"></i><div><b>기업 매칭</b><Badge asChild variant="secondary"><small className="st-live">진행중</small></Badge></div></div>
                 </div>
-              </div>
+              </Card>
             </div>
           </div>
         </article>
@@ -495,7 +503,7 @@ export default function ContentSections() {
               </div>
             </div>
             <div className="ch-vis" id="vis3">
-              <div className="inbox vcard">
+              <Card presentation className="inbox vcard">
                 <div className="inbox-h">
                   <span className="h1">지원 현황</span>
                   <span className="h2">받은 제안 3건</span>
@@ -514,7 +522,7 @@ export default function ContentSections() {
                     <div className="irow"><span className="co">G</span><span className="tx">기업 G<small>컬처핏이 잘 맞아요</small></span><span className="st">면접 제안</span></div>
                   </div>
                 </div>
-              </div>
+              </Card>
             </div>
           </div>
         </article>
@@ -543,7 +551,7 @@ export default function ContentSections() {
                 <span className="lm"><i></i>나의 면접 결과</span>
               </div>
             </div>
-            <div className="card fit-card" id="fitCard">
+            <Card presentation className="card fit-card" id="fitCard">
               <div className="fc-body" id="fcBody">
                 <div className="fc-h">
                   <span className="co" id="fcCo">A</span>
@@ -561,7 +569,7 @@ export default function ContentSections() {
                   <strong id="fitScore">0<span>%</span></strong>
                 </div>
               </div>
-            </div>
+            </Card>
           </div>
         </div>
       </section>
@@ -637,9 +645,9 @@ export default function ContentSections() {
         </div>
       </section>
 
+      {/* demo + reservation: a full-width light section */}
+      <DemoSection />
       <div className="wrap">
-        {/* demo + reservation */}
-        <DemoSection />
 
         {/* footer */}
         <footer>

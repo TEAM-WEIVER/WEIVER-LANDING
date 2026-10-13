@@ -1,3 +1,5 @@
+import { PersonAvatar } from '../PersonAvatar';
+import { Card } from '../ui/card';
 import { publicAsset } from '../../public-asset.js';
 import { useEffect, useRef } from 'react';
 
@@ -65,8 +67,8 @@ export default function DashboardFrame() {
             <span className="d-me" />
           </div>
           <div className="d-main">
-            <div className="d-card d-prof">
-              <img className="d-ava" src={publicAsset("avatar.jpg")} alt="" />
+            <Card presentation className="d-card d-prof">
+              <PersonAvatar className="d-ava" />
               <div className="d-id">
                 <b>김위버님</b>
                 <span>
@@ -102,9 +104,9 @@ export default function DashboardFrame() {
                 <span className="d-btn">프로필 수정</span>
                 <span className="d-btn off">제출 완료</span>
               </div>
-            </div>
+            </Card>
             <div className="d-row">
-              <div className="d-card d-proc">
+              <Card presentation className="d-card d-proc">
                 <h4>AI 채용 프로세스</h4>
                 <div className="d-steps">
                   <div className="step" style={{ '--d': '1.05s' }}>
@@ -133,7 +135,7 @@ export default function DashboardFrame() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </Card>
               <div className="d-cta">
                 <b>AI 면접을 진행할 준비가 되셨나요?</b>
                 <p>면접은 1차 기술면접, 2차 인적성면접으로 진행되며 약 1시간 정도 소요됩니다.</p>

@@ -1,11 +1,13 @@
+import { PersonAvatar } from '../../PersonAvatar';
+import { Card } from '../../ui/card';
 import { publicAsset } from '../../../public-asset.js';
 export default function Scene5b() {
   return (
     <>
-      <div className="mini card center">
-        <img src={publicAsset("avatar.jpg")} alt="" />
+      <Card presentation className="mini card center">
+        <PersonAvatar className="profile-avatar" />
         <div><b>김위버</b><small>역량 프로필</small></div>
-      </div>
+      </Card>
       <div className="note n1" style={{ '--x': '-240px', '--y': '-110px', '--d': '0.2s' }}>
         <span className="co">A</span>
         <span><b>기업 A</b>에서 면접을 제안했어요</span>

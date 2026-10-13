@@ -29,8 +29,20 @@ function getUtm() {
   };
 }
 
+// Share initialization so a fast submission does not send a missing visitor ID.
+let bootstrapPromise = null;
+export function bootstrap() {
+  if (!bootstrapPromise) {
+    bootstrapPromise = bootstrapVisitor().then((id) => {
+      if (!id) bootstrapPromise = null;
+      return id;
+    });
+  }
+  return bootstrapPromise;
+}
+
 // F1 — 방문자 부트스트랩
-export async function bootstrap() {
+async function bootstrapVisitor() {
   try {
     const res = await fetch(`${BASE}/api/v1/visitors/bootstrap`, {
       method: 'POST',
@@ -91,7 +103,8 @@ export function rememberSurveyReservation(reservation) {
 
 // F3 — 사전예약
 export async function reserve({ name, email, reservationType, privacyConsent, jobFamily, applicantType, primaryRole }) {
-  const visitorId = sessionStorage.getItem('visitor_id');
+  const visitorId = sessionStorage.getItem('visitor_id') || await bootstrap();
+  if (!visitorId) throw new Error('RESERVE_FAILED');
   const res = await fetch(`${BASE}/api/v1/reservations`, {
     method: 'POST',
     credentials: 'include',
