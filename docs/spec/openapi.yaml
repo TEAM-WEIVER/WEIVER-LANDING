@@ -5,7 +5,10 @@ info:
   x-server-event-names: [survey_started, survey_skipped, survey_completed]
   description: |
     weiver 데모 테스터 모집 랜딩페이지 API.
-    설문 계약 v1의 목표 명세이며 구현·배포 상태는 api-contract.md를 참고합니다.
+    2026-10-13: 랜딩은 직군·지원 유형·세부 직무·이름·이메일 및 개인정보 동의만 수집합니다.
+    상세 설문은 데모 단계로 미뤘으며 데모 세부 기획은 미정입니다.
+    survey 경로와 survey_* 이벤트는 이전 목표 명세 기록으로 보류하며 랜딩에서 제공하지 않습니다.
+    기존 초기 설문 행·토큰 생성은 유지하며 구현·배포 상태는 api-contract.md를 참고합니다.
     방문자 식별(F1), 이벤트 트래킹(F2), 사전예약(F3), 어드민 지표(F4)로 구성됩니다.
 
 servers:
