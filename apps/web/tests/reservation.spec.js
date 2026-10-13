@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { JOB_FAMILIES, APPLICANT_TYPES, PRIMARY_ROLES } from '../src/survey-options';
 
 const ID = '770e8400-e29b-41d4-a716-446655440002';
 const TOKEN = 'A'.repeat(43);
@@ -38,10 +39,16 @@ async function setup(page, { rejectStorage = false, duplicate = false } = {}) {
   return { reservations, events };
 }
 
+async function choose(page, name, code) {
+  const option = [...JOB_FAMILIES, ...APPLICANT_TYPES, ...Object.values(PRIMARY_ROLES).flat()].find((item) => item.code === code);
+  await page.getByRole('combobox', { name }).click();
+  await page.getByRole('option', { name: option.label, exact: true }).click();
+}
+
 async function fill(page) {
-  await page.getByRole('combobox', { name: /^직군/ }).selectOption('FE');
-  await page.getByRole('combobox', { name: /현재 지원 유형/ }).selectOption('entry_level');
-  await page.getByRole('combobox', { name: /주 관심 직무/ }).selectOption('web_frontend');
+  await choose(page, /^직군/, 'FE');
+  await choose(page, /현재 지원 유형/, 'entry_level');
+  await choose(page, /주 관심 직무/, 'web_frontend');
   await page.getByRole('textbox', { name: '이름', exact: true }).fill('홍길동');
   await page.getByRole('textbox', { name: '이메일', exact: true }).fill('test@example.com');
   await page.getByRole('checkbox', { name: /개인정보 수집/ }).check();
@@ -59,12 +66,14 @@ test('requires the three questions and consent; changing family resets the role'
   expect(reservations).toHaveLength(0);
   await expect(page.getByRole('combobox', { name: /주 관심 직무/ })).toBeDisabled();
   await fill(page);
-  await page.getByRole('combobox', { name: /^직군/ }).selectOption('BE');
-  await expect(page.getByRole('combobox', { name: /주 관심 직무/ })).toHaveValue('');
-  await expect(page.locator('select[name="primaryRole"] option[value="web_frontend"]')).toHaveCount(0);
+  await choose(page, /^직군/, 'BE');
+  await expect(page.getByRole('combobox', { name: /주 관심 직무/ })).toHaveText('주 관심 직무 선택');
+  await page.getByRole('combobox', { name: /주 관심 직무/ }).click();
+  await expect(page.getByRole('option', { name: '웹 프론트엔드 (서비스·제품 UI)', exact: true })).toHaveCount(0);
+  await page.keyboard.press('Escape');
   await submit(page);
   expect(reservations).toHaveLength(0);
-  await page.getByRole('combobox', { name: /주 관심 직무/ }).selectOption('server_api');
+  await choose(page, /주 관심 직무/, 'server_api');
   await page.getByRole('checkbox', { name: /개인정보 수집/ }).uncheck();
   await submit(page);
   expect(reservations).toHaveLength(0);
@@ -117,14 +126,20 @@ test('duplicate email never stores a token or emits a completion', async ({ page
 test('all family choices render within the viewport with readable controls', async ({ page }, testInfo) => {
   await setup(page);
   for (const [family, count] of [['FE', 7], ['BE', 6], ['AI', 10]]) {
-    await page.getByRole('combobox', { name: /^직군/ }).selectOption(family);
-    await expect(page.locator('select[name="primaryRole"] option')).toHaveCount(count + 1);
-    const select = await page.locator('select[name="primaryRole"]').boundingBox();
+    await choose(page, /^직군/, family);
+    const trigger = page.getByRole('combobox', { name: /주 관심 직무/ });
+    await trigger.click();
+    await expect(page.getByRole('option')).toHaveCount(count);
+    const popup = await page.getByRole('listbox').boundingBox();
+    expect(popup.x).toBeGreaterThanOrEqual(0);
+    expect(popup.x + popup.width).toBeLessThanOrEqual(page.viewportSize().width);
+    await page.keyboard.press('Escape');
+    const select = await trigger.boundingBox();
     expect(select.width).toBeGreaterThan(150);
     expect(select.x + select.width).toBeLessThanOrEqual(page.viewportSize().width);
   }
   if (testInfo.project.name === 'mobile') {
-    const boxes = await page.locator('.reservation-survey select').evaluateAll((elements) => elements.map((element) => element.getBoundingClientRect().y));
+    const boxes = await page.locator('.reservation-survey [data-slot="select-trigger"]').evaluateAll((elements) => elements.map((element) => element.getBoundingClientRect().y));
     expect(boxes[0]).toBeLessThan(boxes[1]);
     expect(boxes[1]).toBeLessThan(boxes[2]);
   }
@@ -175,4 +190,34 @@ test('pending submission disables controls and failure keeps inputs for retry', 
   await submit(page);
   await expect(page.locator('.reservation-message[role="status"]')).toContainText('사전예약이 완료됐습니다');
   expect(reservations).toHaveLength(1);
+});
+
+test('custom dropdown validates missing values and supports keyboard selection and Escape', async ({ page }, testInfo) => {
+  const { reservations } = await setup(page);
+  await page.getByRole('textbox', { name: '이름', exact: true }).fill('홍길동');
+  await page.getByRole('textbox', { name: '이메일', exact: true }).fill('test@example.com');
+  await page.getByRole('checkbox', { name: /개인정보 수집/ }).check();
+  await submit(page);
+  const family = page.getByRole('combobox', { name: /^직군/ });
+  await expect(family).toBeFocused();
+  await expect(family).toHaveAttribute('aria-invalid', 'true');
+  await expect(page.locator('#job-family-error')).toHaveText('직군을 선택해주세요.');
+  expect(reservations).toHaveLength(0);
+  await family.press('Space');
+  await expect(page.getByRole('listbox')).toBeVisible();
+  await page.keyboard.press('Home');
+  await page.keyboard.press('Enter');
+  await expect(family).toHaveText('프론트엔드');
+  await expect(family).toHaveAttribute('aria-invalid', 'false');
+  const role = page.getByRole('combobox', { name: /주 관심 직무/ });
+  await role.click();
+  await expect.poll(() => page.getByRole('listbox').evaluate((element) => getComputedStyle(element).opacity)).toBe('1');
+  await page.screenshot({ path: testInfo.outputPath('custom-select-open.png') });
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('listbox')).toHaveCount(0);
+  await expect(role).toBeFocused();
+  await choose(page, /주 관심 직무/, 'performance_platform');
+  await expect(role).toHaveText('웹 성능 / 프론트엔드 플랫폼 (SSR, 빌드, 인프라)');
+  const box = await role.boundingBox();
+  expect(box.x + box.width).toBeLessThanOrEqual(page.viewportSize().width);
 });

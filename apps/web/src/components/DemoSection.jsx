@@ -5,7 +5,7 @@ import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
 import { Input } from './ui/input';
-import { NativeSelect } from './ui/native-select';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from './ui/select';
 import { Checkbox } from './ui/checkbox';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 import { Alert, AlertDescription } from './ui/alert';
@@ -17,6 +17,17 @@ const OPTIONS = [
   { id: 'REVERSE_MATCHING', badge: '전체 과정 경험', badgeClass: 'full', title: '역매칭 준비 체험', sub: '이력서 + 자기소개서 + 포트폴리오', desc: '역량 프로필을 완성하고 정식 출시 후 기업 컨택까지 준비해요.' },
 ];
 
+function ReservationSelect({ id, name, value, onValueChange, options, placeholder, disabled, error }) {
+  return <Select name={name} value={value} onValueChange={onValueChange} disabled={disabled}>
+    <SelectTrigger id={id} aria-required="true" aria-invalid={Boolean(error)} aria-describedby={error ? `${id}-error` : undefined}>
+      <SelectValue placeholder={placeholder} />
+    </SelectTrigger>
+    <SelectContent position="popper" align="start" className="reservation-select-content" collisionPadding={16}>
+      {options.map(({ code, label }) => <SelectItem key={code} value={code}>{label}</SelectItem>)}
+    </SelectContent>
+  </Select>;
+}
+
 export default function DemoSection() {
   const [selected, setSelected] = useState(OPTIONS[0].id);
   const [jobFamily, setJobFamily] = useState('');
@@ -24,13 +35,25 @@ export default function DemoSection() {
   const [primaryRole, setPrimaryRole] = useState('');
   const [consent, setConsent] = useState(false);
   const [consentError, setConsentError] = useState(false);
+  const [selectionErrors, setSelectionErrors] = useState({});
   const reservationRef = useRef(null);
   const [status, setStatus] = useState('idle');
 
   async function handleSubmit(e) {
     e.preventDefault();
     const form = e.currentTarget;
-    if (status === 'loading' || !form.reportValidity()) return;
+    if (status === 'loading') return;
+    const errors = {};
+    if (!jobFamily) errors.jobFamily = '직군을 선택해주세요.';
+    if (!applicantType) errors.applicantType = '지원 유형을 선택해주세요.';
+    if (!primaryRole) errors.primaryRole = '주 관심 직무를 선택해주세요.';
+    setSelectionErrors(errors);
+    if (Object.keys(errors).length) {
+      const id = !jobFamily ? 'job-family' : !applicantType ? 'applicant-type' : 'primary-role';
+      document.getElementById(id)?.focus();
+      return;
+    }
+    if (!form.reportValidity()) return;
     if (!consent) { setConsentError(true); return; }
     const fields = new FormData(form);
     const name = fields.get('name').trim();
@@ -81,26 +104,23 @@ export default function DemoSection() {
           }}>
             <FieldSet className="reservation-survey" disabled={status === 'loading'}>
               <FieldLegend>지원 분야를 알려주세요</FieldLegend>
-              <Field>
+              <Field data-invalid={Boolean(selectionErrors.jobFamily)}>
                 <FieldLabel htmlFor="job-family">직군 <small>(필수)</small></FieldLabel>
-                <NativeSelect id="job-family" name="jobFamily" required value={jobFamily} onChange={(e) => { setJobFamily(e.target.value); setPrimaryRole(''); }}>
-                  <option value="">직군 선택</option>
-                  {JOB_FAMILIES.map(({ code, label }) => <option key={code} value={code}>{label}</option>)}
-                </NativeSelect>
+                <ReservationSelect id="job-family" name="jobFamily" value={jobFamily} placeholder="직군 선택" options={JOB_FAMILIES} disabled={status === 'loading'} error={selectionErrors.jobFamily}
+                  onValueChange={(value) => { setJobFamily(value); setPrimaryRole(''); setSelectionErrors((errors) => ({ ...errors, jobFamily: undefined, primaryRole: undefined })); }} />
+                <FieldError id="job-family-error">{selectionErrors.jobFamily}</FieldError>
               </Field>
-              <Field>
+              <Field data-invalid={Boolean(selectionErrors.applicantType)}>
                 <FieldLabel htmlFor="applicant-type">현재 지원 유형 <small>(필수)</small></FieldLabel>
-                <NativeSelect id="applicant-type" name="applicantType" required value={applicantType} onChange={(e) => setApplicantType(e.target.value)}>
-                  <option value="">지원 유형 선택</option>
-                  {APPLICANT_TYPES.map(({ code, label }) => <option key={code} value={code}>{label}</option>)}
-                </NativeSelect>
+                <ReservationSelect id="applicant-type" name="applicantType" value={applicantType} placeholder="지원 유형 선택" options={APPLICANT_TYPES} disabled={status === 'loading'} error={selectionErrors.applicantType}
+                  onValueChange={(value) => { setApplicantType(value); setSelectionErrors((errors) => ({ ...errors, applicantType: undefined })); }} />
+                <FieldError id="applicant-type-error">{selectionErrors.applicantType}</FieldError>
               </Field>
-              <Field>
+              <Field data-invalid={Boolean(selectionErrors.primaryRole)}>
                 <FieldLabel htmlFor="primary-role">주 관심 직무 <small>(필수)</small></FieldLabel>
-                <NativeSelect id="primary-role" name="primaryRole" required disabled={!jobFamily} value={primaryRole} onChange={(e) => setPrimaryRole(e.target.value)}>
-                  <option value="">{jobFamily ? '주 관심 직무 선택' : '직군을 먼저 선택해주세요'}</option>
-                  {(PRIMARY_ROLES[jobFamily] ?? []).map(({ code, label }) => <option key={code} value={code}>{label}</option>)}
-                </NativeSelect>
+                <ReservationSelect id="primary-role" name="primaryRole" value={primaryRole} placeholder={jobFamily ? '주 관심 직무 선택' : '직군을 먼저 선택해주세요'} options={PRIMARY_ROLES[jobFamily] ?? []} disabled={!jobFamily || status === 'loading'} error={selectionErrors.primaryRole}
+                  onValueChange={(value) => { setPrimaryRole(value); setSelectionErrors((errors) => ({ ...errors, primaryRole: undefined })); }} />
+                <FieldError id="primary-role-error">{selectionErrors.primaryRole}</FieldError>
               </Field>
             </FieldSet>
             <Field><FieldLabel htmlFor="reservation-name">이름 <small>(필수)</small></FieldLabel>
