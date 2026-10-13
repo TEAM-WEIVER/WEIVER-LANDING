@@ -20,3 +20,5 @@ management:
 app:
   web-allowed-origin: ${WEB_ALLOWED_ORIGIN:http://localhost:5173}
   admin-token: ${ADMIN_TOKEN:dev-token}
+
+  survey-stage1-strict: ${SURVEY_STAGE1_STRICT:false}

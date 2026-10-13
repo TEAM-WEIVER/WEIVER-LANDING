@@ -1,6 +1,8 @@
 package com.weiver.landing.common;
 
 import com.weiver.landing.reservation.DuplicateEmailException;
+import com.weiver.landing.reservation.InvalidReservationRequestException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidation(MethodArgumentNotValidException ex) {
+        return ErrorResponse.of("INVALID_REQUEST");
+    }
+
+    @ExceptionHandler({InvalidReservationRequestException.class, HttpMessageNotReadableException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleInvalidRequest(Exception ex) {
         return ErrorResponse.of("INVALID_REQUEST");
     }
 

@@ -6,6 +6,8 @@ on:
 
 jobs:
   deploy-api:
+    # Set only after applying 202610120001_add_stage1_survey.sql (see deployment runbook).
+    if: ${{ vars.SURVEY_STAGE1_DB_READY == 'true' && startsWith(vars.LANDING_API_URL, 'https://') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -42,8 +44,14 @@ jobs:
             cd ~/weiver
             docker compose pull
             docker compose up -d
+            for attempt in $(seq 1 30); do
+              if curl --fail --silent http://localhost:8080/actuator/health > /dev/null; then exit 0; fi
+              sleep 2
+            done
+            exit 1
 
   deploy-web:
+    needs: deploy-api
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -59,7 +67,7 @@ jobs:
       - name: Build frontend
         run: npm run build:web
         env:
-          VITE_API_URL: http://${{ secrets.OCI_HOST }}
+          VITE_API_URL: ${{ vars.LANDING_API_URL }}
 
       - name: Copy to server
         uses: appleboy/scp-action@v0.1.7

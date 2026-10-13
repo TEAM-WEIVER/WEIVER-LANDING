@@ -54,25 +54,43 @@ export async function bootstrap() {
 
 // F2 — 이벤트 트래킹 (fire-and-forget)
 export function track(eventName, properties = {}) {
-  const visitorId = sessionStorage.getItem('visitor_id');
-  if (!visitorId) return;
+  try {
+    const visitorId = sessionStorage.getItem('visitor_id');
+    if (!visitorId) return;
 
-  fetch(`${BASE}/api/v1/events`, {
-    method: 'POST',
-    credentials: 'include',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      visitorId,
-      sessionId: getSessionId(),
-      eventName,
-      path: location.pathname,
-      properties,
-    }),
-  }).catch(() => {});
+    fetch(`${BASE}/api/v1/events`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        visitorId,
+        sessionId: getSessionId(),
+        eventName,
+        path: location.pathname,
+        properties,
+      }),
+    }).catch(() => {});
+  } catch {
+    // Storage/network failures must never turn a saved reservation into an error.
+  }
+}
+
+/** Returns false when this browser cannot retain stage-2 continuation credentials. */
+export function rememberSurveyReservation(reservation) {
+  if (!reservation?.id || !reservation.surveyAccessToken) return false;
+  try {
+    localStorage.setItem(`weiver.survey.v1.${reservation.id}`, JSON.stringify({
+      reservationId: reservation.id,
+      surveyAccessToken: reservation.surveyAccessToken,
+    }));
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 // F3 — 사전예약
-export async function reserve({ name, email, reservationType, privacyConsent }) {
+export async function reserve({ name, email, reservationType, privacyConsent, jobFamily, applicantType, primaryRole }) {
   const visitorId = sessionStorage.getItem('visitor_id');
   const res = await fetch(`${BASE}/api/v1/reservations`, {
     method: 'POST',
@@ -85,6 +103,9 @@ export async function reserve({ name, email, reservationType, privacyConsent }) 
       email,
       reservationType,
       privacyConsent,
+      jobFamily,
+      applicantType,
+      primaryRole,
       utm: getUtm(),
     }),
   });

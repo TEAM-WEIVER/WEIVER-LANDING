@@ -705,7 +705,7 @@
 /* reservation */
 .reservation {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr);
   gap: 18px 28px;
   align-items: center;
   padding: 24px;
@@ -717,11 +717,12 @@
 .reservation-copy output { font-weight: 700; font-size: 1.05rem; }
 .reservation form {
   display: grid;
-  grid-template-columns: 130px 200px auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
   align-items: center;
 }
-.reservation input {
+.reservation input,
+.reservation select {
   width: 100%;
   min-height: 44px;
   border: 1px solid transparent;
@@ -730,7 +731,7 @@
   font: inherit;
   color: var(--text-primary);
 }
-.reservation input:focus { outline: 3px solid rgba(94, 234, 212, 0.55); outline-offset: 2px; }
+.reservation input:focus, .reservation select:focus { outline: 3px solid rgba(94, 234, 212, 0.55); outline-offset: 2px; }
 .reservation-consent {
   display: flex;
   grid-column: 1 / -1;
@@ -757,6 +758,25 @@
 .reservation-message { display: none; grid-column: 1 / -1; margin: 0; color: #99f6e4; font-size: 0.86rem; }
 .reservation-message.show { display: block; }
 
+.reservation-survey {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  min-width: 0;
+  margin: 0 0 8px;
+  padding: 0;
+  border: 0;
+}
+.reservation-survey legend { margin-bottom: 14px; font-weight: 700; }
+.reservation-survey label { display: grid; min-width: 0; gap: 6px; font-size: 0.85rem; }
+.reservation-survey small { color: #cbd5e1; }
+.reservation select { min-width: 0; background: white; }
+.reservation form > button { grid-column: 1 / -1; justify-self: start; }
+.reservation button:disabled { cursor: wait; opacity: 0.65; }
+.reservation-message p { margin: 0; }
+.reservation-message p + p { margin-top: 8px; color: #cbd5e1; }
+
 /* footer */
 footer { padding: 28px 0 48px; color: #cbd5e1; font-size: 0.85rem; border-top: 1px solid rgba(255, 255, 255, 0.2); }
 
@@ -764,7 +784,8 @@ footer { padding: 28px 0 48px; color: #cbd5e1; font-size: 0.85rem; border-top: 1
 @media (max-width: 760px) {
   .demo-options,
   .reservation,
-  .reservation form { grid-template-columns: 1fr; }
+  .reservation form,
+  .reservation-survey { grid-template-columns: 1fr; }
   .demo-head { display: block; }
   .demo-head > p { margin-top: 18px; }
 }

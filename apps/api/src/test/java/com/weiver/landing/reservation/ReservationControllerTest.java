@@ -32,7 +32,7 @@ class ReservationControllerTest {
     @DisplayName("유효한 예약 요청 → 201, 생성된 id 반환")
     void reserve_valid() throws Exception {
         UUID createdId = UUID.randomUUID();
-        when(reservationService.reserve(any())).thenReturn(createdId);
+        when(reservationService.reserve(any())).thenReturn(new ReservationCreatedResponse(createdId, null, null));
 
         mvc.perform(post("/api/v1/reservations")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -124,7 +124,7 @@ class ReservationControllerTest {
     @DisplayName("utm 필드 전체 생략 → 201 (optional)")
     void reserve_withoutUtm() throws Exception {
         UUID createdId = UUID.randomUUID();
-        when(reservationService.reserve(any())).thenReturn(createdId);
+        when(reservationService.reserve(any())).thenReturn(new ReservationCreatedResponse(createdId, null, null));
 
         Map<String, Object> req = new java.util.HashMap<>(validRequest());
         req.remove("utm");

@@ -408,7 +408,7 @@ export default function ContentSections() {
     <div className="content">
       <div className="wrap">
         {/* lead */}
-        <section className="lead" id="reserve" data-section-id="lead">
+        <section className="lead" id="lead" data-section-id="lead">
           <p className="tagline">기업이 먼저 찾는 역매칭 구직 서비스</p>
           <h1>한 번 준비하고, 여러 기업에게 먼저 제안받으세요.</h1>
           <p className="desc">
