@@ -43,16 +43,11 @@ function useChaptersScroll() {
     const ease = (t) => t * t * (3 - 2 * t);
     const chapters = Array.from(document.querySelectorAll('.chapter'));
 
-    // 단어별 opacity 애니메이션용 span 삽입
+    // Keep questions fully readable before illustration movement begins.
     chapters.forEach((ch) => {
-      const q = ch.querySelector('.q');
-      q.innerHTML = q.textContent
-        .split(' ')
-        .map((w) => `<span class="w">${w}</span>`)
-        .join(' ');
-      ch._words = q.querySelectorAll('.w');
       ch._ics = ch.querySelectorAll('.solcard .ic');
     });
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // ch1: 자소서 질문 카드
     const QS = [
@@ -167,15 +162,13 @@ function useChaptersScroll() {
         const r = ch.getBoundingClientRect();
         if (r.bottom < -vh || r.top > vh * 1.5) return;
         const p = clamp(-r.top / (ch.offsetHeight - vh));
-        const a = seg(p, 0.02, 0.36);
-        const b = seg(p, 0.44, 0.6);
-        const c = seg(p, 0.58, 0.76);
-        const n = ch._words.length;
-        ch._words.forEach((w, i) => {
-          w.style.opacity = (0.12 + 0.88 * clamp(a * (n + 1) - i)).toFixed(3);
-        });
+        const a = reduce ? 1 : seg(p, 0.18, 0.46);
+        const b = reduce ? 1 : seg(p, 0.52, 0.66);
+        const c = reduce ? 1 : seg(p, 0.73, 0.9);
+        const copy = reduce ? 1 : seg(p, 0.56, 0.66);
         ch.style.setProperty('--b', ease(b).toFixed(3));
         ch.style.setProperty('--c', ease(c).toFixed(3));
+        ch.style.setProperty('--copy', ease(copy).toFixed(3));
         ch.classList.toggle('solved', b > 0.5);
         ch._ics.forEach((ic, i) => {
           ic.style.setProperty('--s', ease(clamp(c * 4 - i - 0.5)).toFixed(3));
@@ -199,6 +192,7 @@ function useChaptersScroll() {
     return () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', update);
+      cards1.forEach((card) => card.remove());
     };
   }, []);
 }
@@ -219,17 +213,24 @@ function useJourneyScroll() {
       }
     }
 
-    let cur = -1;
+    let cur = -1, visual = -1;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     function update() {
       const r = j.getBoundingClientRect();
       const total = j.offsetHeight - window.innerHeight;
       const p = Math.min(Math.max(-r.top / total, 0), 0.999);
       const step = Math.floor(p * 4);
-      if (step === cur) return;
-      cur = step;
-      j.setAttribute('data-step', step);
-      j.style.setProperty('--step', step);
-      items.forEach((el, i) => el.classList.toggle('on', i === step));
+      if (step !== cur) {
+        cur = step;
+        j.style.setProperty('--step', step);
+        items.forEach((el, i) => el.classList.toggle('on', i === step));
+      }
+      const nextVisual = reduce || p * 4 - step >= 0.25 ? step : Math.max(0, step - 1);
+      if (visual !== nextVisual) {
+        visual = nextVisual;
+        j.setAttribute('data-step', visual);
+        j.style.setProperty('--visual-step', visual);
+      }
     }
 
     function onScroll() { requestAnimationFrame(update); }

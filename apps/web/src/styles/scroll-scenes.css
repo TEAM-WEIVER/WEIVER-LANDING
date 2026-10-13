@@ -1,0 +1,12 @@
+/* Text first, illustration second, with longer scroll intervals. */
+.chapter .q { transform: none; }
+.sol { opacity: var(--copy, 0); transform: none; }
+.j-stage { --step: var(--visual-step, 0); }
+
+/* More reading/holding distance per journey step; keep native scrolling. */
+.journey { height: 1100svh; }
+@media (max-width: 760px) { .journey { height: 980svh; } }
+
+/* Chapters 02 and 03 retain their phases over a longer scroll distance. */
+#ch2, #ch3 { height: 410svh; }
+@media (max-width: 760px) { #ch2, #ch3 { height: 360svh; } }
