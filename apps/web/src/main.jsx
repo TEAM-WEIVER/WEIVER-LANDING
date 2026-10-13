@@ -10,6 +10,7 @@ import './styles/content.css';
 import './styles/landing-theme.css';
 import './styles/reservation.css';
 import './styles/scroll-scenes.css';
+import './styles/film-layout.css';
 import App from './App';
 
 createRoot(document.getElementById('root')).render(
