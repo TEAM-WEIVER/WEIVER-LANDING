@@ -1,8 +1,9 @@
+import { publicAsset } from '../../../public-asset.js';
 export default function Scene5b() {
   return (
     <>
       <div className="mini card center">
-        <img src="/avatar.jpg" alt="" />
+        <img src={publicAsset("avatar.jpg")} alt="" />
         <div><b>김위버</b><small>역량 프로필</small></div>
       </div>
       <div className="note n1" style={{ '--x': '-240px', '--y': '-110px', '--d': '0.2s' }}>

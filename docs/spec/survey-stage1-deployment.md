@@ -38,6 +38,10 @@ GitHub에서 건너뛴 workflow를 재실행할 때는 Deploy run의 전체 재�
 
 ## 활성 제출 경로 확인
 
+- 새 운영 주소는 `https://weiverai.com/`, 랜딩 API는 `https://landing-api.weiverai.com`이다. React 빌드의 JS/CSS/이미지·favicon은 `/landing-assets/` 경로를 사용한다. `landing-origin.weiverai.com` Nginx는 해당 접두사를 제거해 `/var/www/weiver` 파일을 제공한다. 본품 Vercel에서 `/`와 `/landing-assets/*`만 이 원본으로 rewrite해야 하며 `/login`, `/_next/*`, `/api/auth/*`는 본품에 남긴다.
+- GitHub `LANDING_API_URL=https://landing-api.weiverai.com`과 Oracle `WEB_ALLOWED_ORIGIN=https://weiverai.com`을 함께 설정한다. 런타임 `.env` 변경 후 API 컨테이너를 재생성하고 새 origin의 preflight를 확인한다. 원본 도메인의 화면 접근 확인은 공개 도메인의 CORS·예약 검증을 대체하지 않는다.
+- 기존 IP 주소에서 저장한 이어쓰기 토큰은 브라우저 origin이 달라 새 도메인에서 자동 복구되지 않는다. 저장소 데이터를 새 도메인으로 자동 복사하거나 URL에 토큰을 붙이지 않는다.
+
 - OCI main push 배포는 `npm run build:web`의 `apps/web/dist`를 `/var/www/weiver`로 복사한다. 따라서 실제 API 제출 경로는 React의 `DemoSection.jsx` → `api.js`다.
 - 루트 `index.html`은 Vercel 정적 진입 경로다. 현재 폼은 저장 API를 호출하지 않고 “입력 정보는 저장되지 않습니다” 안내를 표시하는 미리보기다. 예약 완료 이벤트도 발행하지 않는다. strict 검증을 활성화해도 이 폼의 예약 요청은 없으며, 실제 수집 채널로 사용할 경우 React 앱으로 연결/전환한 후 활성화해야 한다.
 - `archive/`의 과거 랜딩은 배포 제출 경로로 사용하지 않는다. 별도 배포·외부 복사본·캐시가 있다면 운영 담당자가 추가 확인한다.
