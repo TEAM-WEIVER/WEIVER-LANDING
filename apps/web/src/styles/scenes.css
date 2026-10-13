@@ -280,3 +280,8 @@
     transform: none;
   }
 }
+
+/* Avatar keeps the illustration's original geometry and image fallback. */
+.profile-avatar { flex: none; width: 48px; height: 48px; border-radius: 10px; }
+.mini .profile-avatar { width: 36px; height: 36px; border-radius: 8px; }
+.profile-avatar img, .d-ava img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }

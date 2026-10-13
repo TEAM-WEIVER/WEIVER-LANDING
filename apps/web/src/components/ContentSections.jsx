@@ -1,3 +1,7 @@
+import { Button } from './ui/button';
+import { Card } from './ui/card';
+import { Badge } from './ui/badge';
+import { Separator } from './ui/separator';
 import { useEffect, useRef } from 'react';
 import DemoSection from './DemoSection';
 import { track } from '../api';
@@ -412,21 +416,21 @@ export default function ContentSections() {
           <p className="tagline">기업이 먼저 찾는 역매칭 구직 서비스</p>
           <h1>한 번 준비하고, 여러 기업에게 먼저 제안받으세요.</h1>
           <p className="desc">
-            기업마다 반복하던 서류와 면접 준비는 이제 한 번으로. 나의 역량을 등록하면, 기업이 먼저 나를 찾습니다.
+            기업마다 반복하던 서류와 면접 준비는 이제 한 번으로. 나의 역량을 등록하면, 기업이 먼저 컨택합니다.
           </p>
           <div className="ctas">
-            <a
+            <Button asChild><a
               className="btn btn-lg btn-primary"
               href="#reserve"
               onClick={(e) => { e.preventDefault(); scrollTo('section.demo'); handleCtaClick('lead_reserve', 'lead'); }}
             >
               데모 사전예약하기
-            </a>
-            <a
+            </a></Button>
+            <Button asChild><a
               className="btn btn-lg btn-ghost"
               href="#how"
               onClick={(e) => { e.preventDefault(); scrollTo('#how'); }}
-            >서비스 알아보기</a>
+            >서비스 알아보기</a></Button>
           </div>
         </section>
       </div>
@@ -444,14 +448,14 @@ export default function ContentSections() {
               </div>
             </div>
             <div className="ch-vis" id="vis1">
-              <div className="card vcard solcard complete-s">
+              <Card presentation className="card vcard solcard complete-s">
                 <b className="ttl">프로필 완성도</b>
                 <div className="tiles">
-                  <div className="tile"><b>이력서</b><small className="st-done">작성완료</small><i className="ic ok"></i></div>
-                  <div className="tile"><b>자기소개서</b><small className="st-done">작성완료</small><i className="ic ok"></i></div>
-                  <div className="tile"><b>포트폴리오</b><small className="st-done">작성완료</small><i className="ic ok"></i></div>
+                  <div className="tile"><b>이력서</b><Badge asChild variant="secondary"><small className="st-done">작성완료</small></Badge><i className="ic ok"></i></div>
+                  <div className="tile"><b>자기소개서</b><Badge asChild variant="secondary"><small className="st-done">작성완료</small></Badge><i className="ic ok"></i></div>
+                  <div className="tile"><b>포트폴리오</b><Badge asChild variant="secondary"><small className="st-done">작성완료</small></Badge><i className="ic ok"></i></div>
                 </div>
-              </div>
+              </Card>
             </div>
           </div>
         </article>
@@ -467,19 +471,19 @@ export default function ContentSections() {
               </div>
             </div>
             <div className="ch-vis" id="vis2">
-              <div className="cal vcard">
+              <Card presentation className="cal vcard">
                 <div className="cal-h"><b>이번 달 채용 일정</b><small>인적성 · 면접 · 과제</small></div>
                 <div className="cal-g" id="calg"></div>
                 <span className="cal-count" id="calc">0건</span>
-              </div>
-              <div className="card vcard solcard flow-s">
+              </Card>
+              <Card presentation className="card vcard solcard flow-s">
                 <b className="ttl">AI 채용 프로세스</b>
                 <div className="tiles">
-                  <div className="tile"><i className="ic ok"></i><div><b>AI 서류분석</b><small className="st-done">분석 완료</small></div></div>
-                  <div className="tile focus"><i className="ic ok"></i><div><b>AI 면접</b><small className="st-done">1회로 완료</small></div></div>
-                  <div className="tile"><i className="ic live"></i><div><b>기업 매칭</b><small className="st-live">진행중</small></div></div>
+                  <div className="tile"><i className="ic ok"></i><div><b>AI 서류분석</b><Badge asChild variant="secondary"><small className="st-done">분석 완료</small></Badge></div></div>
+                  <div className="tile focus"><i className="ic ok"></i><div><b>AI 면접</b><Badge asChild variant="secondary"><small className="st-done">1회로 완료</small></Badge></div></div>
+                  <div className="tile"><i className="ic live"></i><div><b>기업 매칭</b><Badge asChild variant="secondary"><small className="st-live">진행중</small></Badge></div></div>
                 </div>
-              </div>
+              </Card>
             </div>
           </div>
         </article>
@@ -495,7 +499,7 @@ export default function ContentSections() {
               </div>
             </div>
             <div className="ch-vis" id="vis3">
-              <div className="inbox vcard">
+              <Card presentation className="inbox vcard">
                 <div className="inbox-h">
                   <span className="h1">지원 현황</span>
                   <span className="h2">받은 제안 3건</span>
@@ -514,7 +518,7 @@ export default function ContentSections() {
                     <div className="irow"><span className="co">G</span><span className="tx">기업 G<small>컬처핏이 잘 맞아요</small></span><span className="st">면접 제안</span></div>
                   </div>
                 </div>
-              </div>
+              </Card>
             </div>
           </div>
         </article>
@@ -543,7 +547,7 @@ export default function ContentSections() {
                 <span className="lm"><i></i>나의 면접 결과</span>
               </div>
             </div>
-            <div className="card fit-card" id="fitCard">
+            <Card presentation className="card fit-card" id="fitCard">
               <div className="fc-body" id="fcBody">
                 <div className="fc-h">
                   <span className="co" id="fcCo">A</span>
@@ -561,7 +565,7 @@ export default function ContentSections() {
                   <strong id="fitScore">0<span>%</span></strong>
                 </div>
               </div>
-            </div>
+            </Card>
           </div>
         </div>
       </section>
@@ -642,6 +646,7 @@ export default function ContentSections() {
         <DemoSection />
 
         {/* footer */}
+        <Separator className="footer-separator" />
         <footer>
           <span className="logo" role="img" aria-label="weiver" style={{ height: '18px', color: 'var(--ink)', display: 'block', marginBottom: '10px' }} />
           한 번의 준비로, 더 많은 가능성을.

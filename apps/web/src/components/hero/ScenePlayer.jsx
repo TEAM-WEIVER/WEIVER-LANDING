@@ -1,3 +1,4 @@
+import { Button } from '../ui/button';
 import { useEffect, useRef, useState } from 'react';
 
 const DURATIONS = [3000, 2400, 4300, 3900, 4700, 3500, 3500, 2500];
@@ -99,7 +100,9 @@ export default function ScenePlayer({ scenes, playing, onTogglePause, onSceneEnt
       <div className="film-ui">
         <p className="intro">weiver가 달라지는 채용을 준비합니다</p>
         {!reduce && (
-          <button
+          <Button
+            variant="ghost"
+            size="icon"
             id="pause"
             className="pause"
             aria-pressed={!playing}
@@ -116,7 +119,7 @@ export default function ScenePlayer({ scenes, playing, onTogglePause, onSceneEnt
                 </>
               )}
             </svg>
-          </button>
+          </Button>
         )}
       </div>
 

@@ -94,12 +94,12 @@ test('sends stable codes, preserves credentials across reloads, and keeps analyt
   expect(JSON.parse(await page.evaluate((key) => localStorage.getItem(key), KEY))).toHaveProperty('surveyAccessToken', TOKEN);
 });
 
-test('storage failure still shows saved reservation and a continuation notice', async ({ page }) => {
+test('storage failure keeps reservation successful without promising a deferred survey', async ({ page }) => {
   const { reservations, events } = await setup(page, { rejectStorage: true });
   await fill(page);
   await submit(page);
   await expect(page.locator('.reservation-message[role="status"]')).toContainText('사전예약이 완료됐습니다');
-  await expect(page.locator('.reservation-message[role="status"]')).toContainText('이어서 작성할 수 없습니다');
+  await expect(page.locator('.reservation-message[role="status"]')).not.toContainText('이어서');
   expect(reservations).toHaveLength(1);
   await expect.poll(() => events.filter((event) => event.eventName === 'reservation_completed').length).toBe(1);
   await expect(page.getByRole('alert')).toHaveCount(0);
@@ -129,4 +129,50 @@ test('all family choices render within the viewport with readable controls', asy
     expect(boxes[1]).toBeLessThan(boxes[2]);
   }
   await page.locator('#reserve').screenshot({ path: testInfo.outputPath('reservation.png') });
+});
+
+test('participation cards support arrow keys and space toggles consent', async ({ page }) => {
+  const { reservations } = await setup(page);
+  const choices = page.getByRole('radio');
+  await choices.first().focus();
+  await page.keyboard.press('ArrowRight', { delay: 100 });
+  await expect(choices.last()).toBeChecked();
+  await expect(page.locator('.reservation-copy output')).toHaveText('역매칭 준비 체험');
+  await fill(page);
+  const consent = page.getByRole('checkbox', { name: /개인정보 수집/ });
+  await consent.focus();
+  await page.keyboard.press('Space');
+  await expect(consent).not.toBeChecked();
+  await submit(page);
+  expect(reservations).toHaveLength(0);
+  await expect(page.getByRole('alert')).toHaveText('개인정보 수집·이용에 동의해주세요.');
+  await consent.focus();
+  await page.keyboard.press('Space');
+  await submit(page);
+  await expect(page.getByRole('status').filter({ hasText: '사전예약이 완료됐습니다' })).toBeVisible();
+  expect(reservations[0].reservationType).toBe('REVERSE_MATCHING');
+});
+
+test('pending submission disables controls and failure keeps inputs for retry', async ({ page }) => {
+  const { reservations, events } = await setup(page);
+  let finish;
+  const gate = new Promise((resolve) => { finish = resolve; });
+  await page.route('**/api/v1/reservations', async (route) => {
+    await gate;
+    await route.fulfill({ status: 500, json: { error: 'INTERNAL_ERROR' } });
+  });
+  await fill(page);
+  await submit(page);
+  await expect(page.getByRole('button', { name: '제출 중...' })).toBeDisabled();
+  await expect(page.getByRole('combobox', { name: /^직군/ })).toBeDisabled();
+  await expect(page.getByRole('checkbox', { name: /개인정보 수집/ })).toBeDisabled();
+  await expect(page.getByRole('radio').first()).toBeDisabled();
+  finish();
+  await expect(page.getByRole('alert')).toHaveText('오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+  await expect(page.getByRole('textbox', { name: '이메일', exact: true })).toHaveValue('test@example.com');
+  expect(events.some((event) => event.eventName === 'reservation_completed')).toBe(false);
+  await page.unroute('**/api/v1/reservations');
+  await submit(page);
+  await expect(page.locator('.reservation-message[role="status"]')).toContainText('사전예약이 완료됐습니다');
+  expect(reservations).toHaveLength(1);
 });

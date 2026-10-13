@@ -1,3 +1,4 @@
+import { Card } from '../../ui/card';
 export default function Scene2() {
   return (
     <>
@@ -16,14 +17,14 @@ export default function Scene2() {
       <div className="win" style={{ '--x': '0px', '--y': '0px', '--r': '0deg', '--d': '0.32s' }}>
         <b>기업 E 자기소개서</b><span /><span /><span />
       </div>
-      <div className="onedoc card center">
+      <Card presentation className="onedoc card center">
         <b>나의 지원 서류</b>
         <ul>
           <li>이력서</li>
           <li>자기소개서</li>
           <li>포트폴리오</li>
         </ul>
-      </div>
+      </Card>
       <p className="cap">이제, 한 번이면 충분해요</p>
     </>
   );

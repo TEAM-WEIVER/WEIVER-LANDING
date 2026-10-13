@@ -1,0 +1,35 @@
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "tw-animate-css";
+
+@theme inline {
+  --color-background: var(--surface);
+  --color-foreground: var(--ink);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--ink);
+  --color-primary: var(--btn);
+  --color-primary-foreground: var(--btn-ink);
+  --color-secondary: var(--line);
+  --color-secondary-foreground: var(--ink);
+  --color-muted: var(--line);
+  --color-muted-foreground: var(--muted);
+  --color-accent: var(--line);
+  --color-accent-foreground: var(--ink);
+  --color-border: var(--line);
+  --color-input: var(--line);
+  --color-ring: var(--hi);
+  --color-destructive: #fca5a5;
+  --radius-sm: 6px;
+  --radius-md: 9px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+}
+
+/* Keep the existing scene reset; scope form defaults to shared UI only. */
+@layer base {
+  [data-slot] { box-sizing: border-box; }
+  [data-slot="button"], [data-slot="radio-group-item"] { font-family: var(--font); }
+  [data-slot="input"], [data-slot="native-select"], [data-slot="checkbox"],
+  [data-slot="radio-group-item"], [data-slot="alert"], [data-slot="badge"] { border-style: solid; }
+}
