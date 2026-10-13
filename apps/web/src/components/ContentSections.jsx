@@ -267,6 +267,7 @@ function useFitScroll() {
     const NS = 'http://www.w3.org/2000/svg';
     const svg = document.getElementById('radar2');
     if (!svg) return;
+    svg.replaceChildren();
 
     function pt(i, r) {
       const a = -Math.PI / 2 + (i * Math.PI) / 3;
@@ -353,9 +354,9 @@ function useFitScroll() {
       const vh = window.innerHeight;
       if (r.bottom < -vh || r.top > vh * 1.5) return;
       const p = clamp(-r.top / (sec.offsetHeight - vh));
-      const a = ease(seg(p, 0.03, 0.2));
-      const b = ease(seg(p, 0.27, 0.42));
-      const c = ease(seg(p, 0.49, 0.63));
+      const a = ease(seg(p, 0.1, 0.22));
+      const b = ease(seg(p, 0.34, 0.45));
+      const c = ease(seg(p, 0.57, 0.65));
 
       ideal.setAttribute('points', pts(CO[0].ideal, 1));
       ideal.setAttribute('stroke-dashoffset', (1 - a).toFixed(3));
@@ -379,7 +380,10 @@ function useFitScroll() {
       const cap = p < 0.24 ? 0 : p < 0.46 ? 1 : p < 0.67 ? 2 : 3;
       if (cap !== curCap) {
         curCap = cap;
-        caps.forEach((el, k) => el.classList.toggle('on', k === cap));
+        caps.forEach((el, k) => {
+          el.classList.toggle('on', k === cap);
+          el.classList.toggle('revealed', k <= cap);
+        });
       }
     }
 
