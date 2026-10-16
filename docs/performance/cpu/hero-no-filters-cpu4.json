@@ -1,0 +1,1594 @@
+{
+  "date": "2026-10-14T07:06:28.891Z",
+  "region": "hero",
+  "variant": "no-filters",
+  "rate": 4,
+  "distance": 1600,
+  "speed": 500,
+  "runs": [
+    {
+      "iteration": 0,
+      "environment": {
+        "w": 390,
+        "h": 844,
+        "dpr": 3,
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36",
+        "url": "https://weiverai.com/",
+        "scripts": [
+          "https://weiverai.com/landing-assets/assets/index-C5Ap-GwH.js"
+        ]
+      },
+      "summary": {
+        "elapsedMs": 3532.300000190735,
+        "startY": 0,
+        "endY": 1601.5,
+        "frames": 92,
+        "meanGapMs": 38.46373626373626,
+        "p95GapMs": 50.19999999999982,
+        "maxGapMs": 50.40000000000009,
+        "gapsOver25Ms": 90,
+        "gapsOver50Ms": 5,
+        "missedVsyncEstimate": 124,
+        "longTaskCount": 0,
+        "longTaskTotalMs": 0,
+        "forcedLayoutLoafMs": 0,
+        "metrics": {
+          "LayoutCount": 13,
+          "RecalcStyleCount": 146,
+          "LayoutDuration": 0.020781999999999995,
+          "RecalcStyleDuration": 0.16793999999999998,
+          "ScriptDuration": 0.293694,
+          "TaskDuration": 0.616276
+        }
+      },
+      "samples": {
+        "active": false,
+        "frames": [
+          {
+            "ts": 938.6,
+            "y": 0
+          },
+          {
+            "ts": 971.8,
+            "y": 0
+          },
+          {
+            "ts": 997.1,
+            "y": 0
+          },
+          {
+            "ts": 1046.9,
+            "y": 2
+          },
+          {
+            "ts": 1089.3,
+            "y": 21.5
+          },
+          {
+            "ts": 1122.6,
+            "y": 38
+          },
+          {
+            "ts": 1164,
+            "y": 58.5
+          },
+          {
+            "ts": 1189.4,
+            "y": 71.5
+          },
+          {
+            "ts": 1238.6,
+            "y": 96
+          },
+          {
+            "ts": 1272.6,
+            "y": 112.5
+          },
+          {
+            "ts": 1306,
+            "y": 129.5
+          },
+          {
+            "ts": 1347.7,
+            "y": 150
+          },
+          {
+            "ts": 1381,
+            "y": 166.5
+          },
+          {
+            "ts": 1414.3,
+            "y": 183.5
+          },
+          {
+            "ts": 1455.3,
+            "y": 203.5
+          },
+          {
+            "ts": 1488.7,
+            "y": 220.5
+          },
+          {
+            "ts": 1530.3,
+            "y": 241
+          },
+          {
+            "ts": 1564,
+            "y": 258
+          },
+          {
+            "ts": 1614.3,
+            "y": 283
+          },
+          {
+            "ts": 1656,
+            "y": 304
+          },
+          {
+            "ts": 1689.2,
+            "y": 320.5
+          },
+          {
+            "ts": 1730.4,
+            "y": 341
+          },
+          {
+            "ts": 1756,
+            "y": 354
+          },
+          {
+            "ts": 1805.7,
+            "y": 379
+          },
+          {
+            "ts": 1839,
+            "y": 395.5
+          },
+          {
+            "ts": 1889.4,
+            "y": 420.5
+          },
+          {
+            "ts": 1931,
+            "y": 441.5
+          },
+          {
+            "ts": 1972.2,
+            "y": 462
+          },
+          {
+            "ts": 2005.9,
+            "y": 479
+          },
+          {
+            "ts": 2055.4,
+            "y": 504
+          },
+          {
+            "ts": 2081,
+            "y": 516.5
+          },
+          {
+            "ts": 2121.7,
+            "y": 537
+          },
+          {
+            "ts": 2155.2,
+            "y": 554
+          },
+          {
+            "ts": 2189.3,
+            "y": 571
+          },
+          {
+            "ts": 2238.4,
+            "y": 595.5
+          },
+          {
+            "ts": 2280.4,
+            "y": 616.5
+          },
+          {
+            "ts": 2322.7,
+            "y": 638
+          },
+          {
+            "ts": 2356,
+            "y": 654.5
+          },
+          {
+            "ts": 2381,
+            "y": 667
+          },
+          {
+            "ts": 2422.7,
+            "y": 688
+          },
+          {
+            "ts": 2471.8,
+            "y": 713
+          },
+          {
+            "ts": 2505.5,
+            "y": 729.5
+          },
+          {
+            "ts": 2555.7,
+            "y": 755
+          },
+          {
+            "ts": 2589.2,
+            "y": 771.5
+          },
+          {
+            "ts": 2639,
+            "y": 796.5
+          },
+          {
+            "ts": 2681,
+            "y": 818
+          },
+          {
+            "ts": 2722.2,
+            "y": 838.5
+          },
+          {
+            "ts": 2764.4,
+            "y": 859.5
+          },
+          {
+            "ts": 2797.1,
+            "y": 876
+          },
+          {
+            "ts": 2847.5,
+            "y": 901.5
+          },
+          {
+            "ts": 2880.3,
+            "y": 918
+          },
+          {
+            "ts": 2922.6,
+            "y": 939
+          },
+          {
+            "ts": 2955.9,
+            "y": 956
+          },
+          {
+            "ts": 2997.7,
+            "y": 977
+          },
+          {
+            "ts": 3038.4,
+            "y": 997
+          },
+          {
+            "ts": 3072.6,
+            "y": 1014.5
+          },
+          {
+            "ts": 3122.1,
+            "y": 1039
+          },
+          {
+            "ts": 3156,
+            "y": 1056
+          },
+          {
+            "ts": 3205.1,
+            "y": 1081
+          },
+          {
+            "ts": 3239.4,
+            "y": 1098
+          },
+          {
+            "ts": 3272.2,
+            "y": 1114.5
+          },
+          {
+            "ts": 3297.6,
+            "y": 1127
+          },
+          {
+            "ts": 3339.3,
+            "y": 1148
+          },
+          {
+            "ts": 3372.7,
+            "y": 1164.5
+          },
+          {
+            "ts": 3422.6,
+            "y": 1190
+          },
+          {
+            "ts": 3455.9,
+            "y": 1206.5
+          },
+          {
+            "ts": 3489.4,
+            "y": 1223
+          },
+          {
+            "ts": 3531,
+            "y": 1244
+          },
+          {
+            "ts": 3563.3,
+            "y": 1260
+          },
+          {
+            "ts": 3605.1,
+            "y": 1281
+          },
+          {
+            "ts": 3647.7,
+            "y": 1302.5
+          },
+          {
+            "ts": 3688.6,
+            "y": 1322.5
+          },
+          {
+            "ts": 3714.3,
+            "y": 1335.5
+          },
+          {
+            "ts": 3746.9,
+            "y": 1352
+          },
+          {
+            "ts": 3788.7,
+            "y": 1372.5
+          },
+          {
+            "ts": 3839.1,
+            "y": 1398
+          },
+          {
+            "ts": 3872.7,
+            "y": 1414.5
+          },
+          {
+            "ts": 3921.8,
+            "y": 1439
+          },
+          {
+            "ts": 3964.2,
+            "y": 1460
+          },
+          {
+            "ts": 3997,
+            "y": 1476.5
+          },
+          {
+            "ts": 4046.8,
+            "y": 1501.5
+          },
+          {
+            "ts": 4080.2,
+            "y": 1518
+          },
+          {
+            "ts": 4114.4,
+            "y": 1535
+          },
+          {
+            "ts": 4156,
+            "y": 1555.5
+          },
+          {
+            "ts": 4196.8,
+            "y": 1576
+          },
+          {
+            "ts": 4231,
+            "y": 1593
+          },
+          {
+            "ts": 4264.3,
+            "y": 1601.5
+          },
+          {
+            "ts": 4297.4,
+            "y": 1601.5
+          },
+          {
+            "ts": 4331.1,
+            "y": 1601.5
+          },
+          {
+            "ts": 4380.5,
+            "y": 1601.5
+          },
+          {
+            "ts": 4406,
+            "y": 1601.5
+          },
+          {
+            "ts": 4438.8,
+            "y": 1601.5
+          }
+        ],
+        "callbacks": {
+          "function c(e){if(r.current){let t=a.last?e-a.last:0;(t>30||!a.last)&&(a.clock+=Math.min(t,100),a.last=e,s())}a.rafId=requestAnimationFrame(c)}": {
+            "count": 92,
+            "total": 270.4000015258789,
+            "max": 4.300000190734863
+          },
+          "function t(){let t=i.current,n=r.current;if(!t||!n)return;let a=t.getBoundingClientRect(),l=t.offsetHeight-window.innerHeight,u=Math.min(Math.max(-a.top/l,0),1);n.style.setProperty(`--p`,u.toFixed(3)),!c&&!s.current&&(a.bottom<=0?o(!1):o(!0)),e=!1}": {
+            "count": 84,
+            "total": 2.299999237060547,
+            "max": 0.5999999046325684
+          },
+          "()=>{b=!1,y()}": {
+            "count": 84,
+            "total": 142.40000009536743,
+            "max": 3.6999998092651367
+          },
+          "function o(){let n=e.getBoundingClientRect(),o=e.offsetHeight-window.innerHeight,s=Math.min(Math.max(-n.top/o,0),.999),c=Math.floor(s*4);c!==r&&(r=c,e.style.setProperty(`--step`,c),t.forEach((e,t)=>e.classList.toggle(`on`,t===c)));let l=a||s*4-c>=.25?c:Math.max(0,c-1);i!==l&&(i=l,e.setAttribute(`data-step`,i),e.style.setProperty(`--visual-step`,i))}": {
+            "count": 84,
+            "total": 0.5999999046325684,
+            "max": 0.40000009536743164
+          },
+          "()=>{k=!1,O()}": {
+            "count": 84,
+            "total": 1.6000003814697266,
+            "max": 0.6999998092651367
+          }
+        },
+        "longTasks": [],
+        "loaf": [
+          {
+            "start": 998.5,
+            "duration": 57.59999990463257,
+            "blocking": 0,
+            "scripts": []
+          },
+          {
+            "start": 1193.7999997138977,
+            "duration": 52.90000009536743,
+            "blocking": 0,
+            "scripts": []
+          },
+          {
+            "start": 1759.7999997138977,
+            "duration": 52.700000286102295,
+            "blocking": 0,
+            "scripts": []
+          },
+          {
+            "start": 2512.5999999046326,
+            "duration": 50.799999713897705,
+            "blocking": 0,
+            "scripts": []
+          }
+        ],
+        "started": 913.1999998092651,
+        "ended": 4445.5,
+        "endY": 1601.5
+      }
+    },
+    {
+      "iteration": 1,
+      "environment": {
+        "w": 390,
+        "h": 844,
+        "dpr": 3,
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36",
+        "url": "https://weiverai.com/",
+        "scripts": [
+          "https://weiverai.com/landing-assets/assets/index-C5Ap-GwH.js"
+        ]
+      },
+      "summary": {
+        "elapsedMs": 4495.599999904633,
+        "startY": 0,
+        "endY": 1601.5,
+        "frames": 88,
+        "meanGapMs": 51.242528735632185,
+        "p95GapMs": 108.30000000000018,
+        "maxGapMs": 1007.8999999999996,
+        "gapsOver25Ms": 67,
+        "gapsOver50Ms": 11,
+        "missedVsyncEstimate": 182,
+        "longTaskCount": 1,
+        "longTaskTotalMs": 151,
+        "forcedLayoutLoafMs": 78.80000000000001,
+        "metrics": {
+          "LayoutCount": 13,
+          "RecalcStyleCount": 133,
+          "LayoutDuration": 0.069884,
+          "RecalcStyleDuration": 0.32600999999999997,
+          "ScriptDuration": 0.33928200000000003,
+          "TaskDuration": 1.331984
+        }
+      },
+      "samples": {
+        "active": false,
+        "frames": [
+          {
+            "ts": 898,
+            "y": 0
+          },
+          {
+            "ts": 931,
+            "y": 0
+          },
+          {
+            "ts": 964.8,
+            "y": 0
+          },
+          {
+            "ts": 1006.8,
+            "y": 0
+          },
+          {
+            "ts": 1040.1,
+            "y": 13.5
+          },
+          {
+            "ts": 1081.9,
+            "y": 34
+          },
+          {
+            "ts": 1123.5,
+            "y": 55
+          },
+          {
+            "ts": 1172.6,
+            "y": 79
+          },
+          {
+            "ts": 1206.4,
+            "y": 96
+          },
+          {
+            "ts": 1240.2,
+            "y": 113
+          },
+          {
+            "ts": 1281.8,
+            "y": 133.5
+          },
+          {
+            "ts": 1315.2,
+            "y": 150
+          },
+          {
+            "ts": 1347.8,
+            "y": 166.5
+          },
+          {
+            "ts": 1381.3,
+            "y": 183
+          },
+          {
+            "ts": 1431,
+            "y": 208
+          },
+          {
+            "ts": 1465.2,
+            "y": 225
+          },
+          {
+            "ts": 1506.9,
+            "y": 246
+          },
+          {
+            "ts": 1548.5,
+            "y": 266.5
+          },
+          {
+            "ts": 1581.1,
+            "y": 283
+          },
+          {
+            "ts": 1615.2,
+            "y": 300
+          },
+          {
+            "ts": 1656.3,
+            "y": 320.5
+          },
+          {
+            "ts": 1689.7,
+            "y": 337
+          },
+          {
+            "ts": 1739.4,
+            "y": 362
+          },
+          {
+            "ts": 1765.2,
+            "y": 375
+          },
+          {
+            "ts": 1814.3,
+            "y": 399.5
+          },
+          {
+            "ts": 1848.1,
+            "y": 416.5
+          },
+          {
+            "ts": 1889.7,
+            "y": 437.5
+          },
+          {
+            "ts": 1922.8,
+            "y": 452.5
+          },
+          {
+            "ts": 1964.4,
+            "y": 474.5
+          },
+          {
+            "ts": 2147.8,
+            "y": 565
+          },
+          {
+            "ts": 2364.8,
+            "y": 675.5
+          },
+          {
+            "ts": 2431,
+            "y": 709
+          },
+          {
+            "ts": 2456.4,
+            "y": 721.5
+          },
+          {
+            "ts": 2473.4,
+            "y": 730
+          },
+          {
+            "ts": 2514.2,
+            "y": 750.5
+          },
+          {
+            "ts": 2547.9,
+            "y": 767.5
+          },
+          {
+            "ts": 2598.5,
+            "y": 793
+          },
+          {
+            "ts": 2640.2,
+            "y": 814
+          },
+          {
+            "ts": 2689.5,
+            "y": 838.5
+          },
+          {
+            "ts": 2715.1,
+            "y": 851.5
+          },
+          {
+            "ts": 2756.2,
+            "y": 872
+          },
+          {
+            "ts": 2806.6,
+            "y": 897.5
+          },
+          {
+            "ts": 2840.2,
+            "y": 914
+          },
+          {
+            "ts": 3040.2,
+            "y": 1014.5
+          },
+          {
+            "ts": 3148.5,
+            "y": 1069
+          },
+          {
+            "ts": 3173.5,
+            "y": 1081.5
+          },
+          {
+            "ts": 3206.8,
+            "y": 1098
+          },
+          {
+            "ts": 3239.8,
+            "y": 1114.5
+          },
+          {
+            "ts": 3264.3,
+            "y": 1127
+          },
+          {
+            "ts": 3289.2,
+            "y": 1139.5
+          },
+          {
+            "ts": 3314.7,
+            "y": 1152
+          },
+          {
+            "ts": 3339.6,
+            "y": 1164.5
+          },
+          {
+            "ts": 3365.2,
+            "y": 1177.5
+          },
+          {
+            "ts": 3389.9,
+            "y": 1189.5
+          },
+          {
+            "ts": 3406.3,
+            "y": 1198
+          },
+          {
+            "ts": 3423.2,
+            "y": 1206.5
+          },
+          {
+            "ts": 3448.4,
+            "y": 1219
+          },
+          {
+            "ts": 3473.5,
+            "y": 1231.5
+          },
+          {
+            "ts": 3497.6,
+            "y": 1243.5
+          },
+          {
+            "ts": 3522.6,
+            "y": 1256
+          },
+          {
+            "ts": 3547.7,
+            "y": 1268.5
+          },
+          {
+            "ts": 3647.9,
+            "y": 1319
+          },
+          {
+            "ts": 3673.2,
+            "y": 1331.5
+          },
+          {
+            "ts": 3723.5,
+            "y": 1356.5
+          },
+          {
+            "ts": 3755.9,
+            "y": 1372.5
+          },
+          {
+            "ts": 3781.4,
+            "y": 1385.5
+          },
+          {
+            "ts": 3831.1,
+            "y": 1410
+          },
+          {
+            "ts": 3864.6,
+            "y": 1425.5
+          },
+          {
+            "ts": 3881.9,
+            "y": 1434.5
+          },
+          {
+            "ts": 3906.8,
+            "y": 1447.5
+          },
+          {
+            "ts": 3930.9,
+            "y": 1460
+          },
+          {
+            "ts": 3956.8,
+            "y": 1472
+          },
+          {
+            "ts": 3973.5,
+            "y": 1486.5
+          },
+          {
+            "ts": 3990.2,
+            "y": 1489.5
+          },
+          {
+            "ts": 4014.4,
+            "y": 1501.5
+          },
+          {
+            "ts": 4039.8,
+            "y": 1514
+          },
+          {
+            "ts": 4065.2,
+            "y": 1526.5
+          },
+          {
+            "ts": 4097.5,
+            "y": 1543
+          },
+          {
+            "ts": 4148.3,
+            "y": 1568
+          },
+          {
+            "ts": 4173.5,
+            "y": 1580.5
+          },
+          {
+            "ts": 4198.1,
+            "y": 1592.5
+          },
+          {
+            "ts": 4223.1,
+            "y": 1601.5
+          },
+          {
+            "ts": 4248.5,
+            "y": 1601.5
+          },
+          {
+            "ts": 4273,
+            "y": 1601.5
+          },
+          {
+            "ts": 4298.5,
+            "y": 1601.5
+          },
+          {
+            "ts": 5306.4,
+            "y": 1601.5
+          },
+          {
+            "ts": 5331,
+            "y": 1601.5
+          },
+          {
+            "ts": 5356.1,
+            "y": 1601.5
+          }
+        ],
+        "callbacks": {
+          "function c(e){if(r.current){let t=a.last?e-a.last:0;(t>30||!a.last)&&(a.clock+=Math.min(t,100),a.last=e,s())}a.rafId=requestAnimationFrame(c)}": {
+            "count": 88,
+            "total": 273.0999975204468,
+            "max": 15.300000190734863
+          },
+          "function t(){let t=i.current,n=r.current;if(!t||!n)return;let a=t.getBoundingClientRect(),l=t.offsetHeight-window.innerHeight,u=Math.min(Math.max(-a.top/l,0),1);n.style.setProperty(`--p`,u.toFixed(3)),!c&&!s.current&&(a.bottom<=0?o(!1):o(!0)),e=!1}": {
+            "count": 78,
+            "total": 12.699999809265137,
+            "max": 2.9000000953674316
+          },
+          "()=>{b=!1,y()}": {
+            "count": 78,
+            "total": 256.59999990463257,
+            "max": 34
+          },
+          "function o(){let n=e.getBoundingClientRect(),o=e.offsetHeight-window.innerHeight,s=Math.min(Math.max(-n.top/o,0),.999),c=Math.floor(s*4);c!==r&&(r=c,e.style.setProperty(`--step`,c),t.forEach((e,t)=>e.classList.toggle(`on`,t===c)));let l=a||s*4-c>=.25?c:Math.max(0,c-1);i!==l&&(i=l,e.setAttribute(`data-step`,i),e.style.setProperty(`--visual-step`,i))}": {
+            "count": 78,
+            "total": 0.5,
+            "max": 0.2999997138977051
+          },
+          "()=>{k=!1,O()}": {
+            "count": 78,
+            "total": 0.5,
+            "max": 0.5
+          }
+        },
+        "longTasks": [
+          {
+            "start": 2182.5,
+            "duration": 151
+          }
+        ],
+        "loaf": [
+          {
+            "start": 1769.3000001907349,
+            "duration": 54.89999961853027,
+            "blocking": 0,
+            "scripts": []
+          },
+          {
+            "start": 2005.6999998092651,
+            "duration": 313,
+            "blocking": 86.2,
+            "scripts": [
+              {
+                "duration": 12.5,
+                "forcedLayout": 0,
+                "source": "https://weiverai.com/landing-assets/assets/index-C5Ap-GwH.js",
+                "position": 220512,
+                "invoker": "Window.fetch.then"
+              },
+              {
+                "duration": 13.599999904632568,
+                "forcedLayout": 12.4,
+                "source": "https://weiverai.com/landing-assets/assets/index-C5Ap-GwH.js",
+                "position": 356617,
+                "invoker": "DOMWindow.onscroll"
+              },
+              {
+                "duration": 17.09999990463257,
+                "forcedLayout": 0,
+                "source": "",
+                "position": -1,
+                "invoker": "FrameRequestCallback"
+              },
+              {
+                "duration": 34,
+                "forcedLayout": 33.3,
+                "source": "",
+                "position": -1,
+                "invoker": "FrameRequestCallback"
+              }
+            ]
+          },
+          {
+            "start": 2337.9000000953674,
+            "duration": 60.5,
+            "blocking": 0,
+            "scripts": [
+              {
+                "duration": 18.299999713897705,
+                "forcedLayout": 0,
+                "source": "https://weiverai.com/landing-assets/assets/index-C5Ap-GwH.js",
+                "position": 220781,
+                "invoker": "Response.json.then"
+              },
+              {
+                "duration": 14.299999713897705,
+                "forcedLayout": 14.3,
+                "source": "",
+                "position": -1,
+                "invoker": "FrameRequestCallback"
+              }
+            ]
+          },
+          {
+            "start": 2560.5999999046326,
+            "duration": 60.80000019073486,
+            "blocking": 0,
+            "scripts": [
+              {
+                "duration": 7,
+                "forcedLayout": 6.9,
+                "source": "",
+                "position": -1,
+                "invoker": "FrameRequestCallback"
+              }
+            ]
+          },
+          {
+            "start": 2767.699999809265,
+            "duration": 51.30000019073486,
+            "blocking": 0,
+            "scripts": []
+          },
+          {
+            "start": 2850.5999999046326,
+            "duration": 276.7000002861023,
+            "blocking": 0,
+            "scripts": [
+              {
+                "duration": 5.100000381469727,
+                "forcedLayout": 0,
+                "source": "",
+                "position": -1,
+                "invoker": "FrameRequestCallback"
+              },
+              {
+                "duration": 13.5,
+                "forcedLayout": 11.9,
+                "source": "",
+                "position": -1,
+                "invoker": "FrameRequestCallback"
+              }
+            ]
+          },
+          {
+            "start": 3551.300000190735,
+            "duration": 106.09999990463257,
+            "blocking": 0,
+            "scripts": []
+          },
+          {
+            "start": 3676.800000190735,
+            "duration": 53.299999713897705,
+            "blocking": 0,
+            "scripts": []
+          },
+          {
+            "start": 3785.699999809265,
+            "duration": 51.90000009536743,
+            "blocking": 0,
+            "scripts": []
+          },
+          {
+            "start": 4307.199999809265,
+            "duration": 1006,
+            "blocking": 0,
+            "scripts": []
+          }
+        ],
+        "started": 875,
+        "ended": 5370.599999904633,
+        "endY": 1601.5
+      }
+    },
+    {
+      "iteration": 2,
+      "environment": {
+        "w": 390,
+        "h": 844,
+        "dpr": 3,
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36",
+        "url": "https://weiverai.com/",
+        "scripts": [
+          "https://weiverai.com/landing-assets/assets/index-C5Ap-GwH.js"
+        ]
+      },
+      "summary": {
+        "elapsedMs": 3408.4000000953674,
+        "startY": 0,
+        "endY": 1601.5,
+        "frames": 118,
+        "meanGapMs": 29.029059829059825,
+        "p95GapMs": 32.90000000000009,
+        "maxGapMs": 1012.5999999999999,
+        "gapsOver25Ms": 20,
+        "gapsOver50Ms": 1,
+        "missedVsyncEstimate": 91,
+        "longTaskCount": 0,
+        "longTaskTotalMs": 0,
+        "forcedLayoutLoafMs": 9.7,
+        "metrics": {
+          "LayoutCount": 13,
+          "RecalcStyleCount": 206,
+          "LayoutDuration": 0.022952,
+          "RecalcStyleDuration": 0.48584099999999997,
+          "ScriptDuration": 0.29751,
+          "TaskDuration": 1.109839
+        }
+      },
+      "samples": {
+        "active": false,
+        "frames": [
+          {
+            "ts": 951.8,
+            "y": 0
+          },
+          {
+            "ts": 959.8,
+            "y": 0
+          },
+          {
+            "ts": 969.1,
+            "y": 0
+          },
+          {
+            "ts": 977.2,
+            "y": 0
+          },
+          {
+            "ts": 985.6,
+            "y": 0
+          },
+          {
+            "ts": 1001.6,
+            "y": 0
+          },
+          {
+            "ts": 1019.1,
+            "y": 0
+          },
+          {
+            "ts": 1044,
+            "y": 9
+          },
+          {
+            "ts": 1069,
+            "y": 20
+          },
+          {
+            "ts": 1093.5,
+            "y": 33.5
+          },
+          {
+            "ts": 1110.3,
+            "y": 42
+          },
+          {
+            "ts": 1127.2,
+            "y": 50.5
+          },
+          {
+            "ts": 1144,
+            "y": 59
+          },
+          {
+            "ts": 1169,
+            "y": 70
+          },
+          {
+            "ts": 1201.8,
+            "y": 87.5
+          },
+          {
+            "ts": 1218.9,
+            "y": 96
+          },
+          {
+            "ts": 1235.2,
+            "y": 104
+          },
+          {
+            "ts": 1252.3,
+            "y": 112.5
+          },
+          {
+            "ts": 1269,
+            "y": 121
+          },
+          {
+            "ts": 1301.9,
+            "y": 137.5
+          },
+          {
+            "ts": 1318.8,
+            "y": 146
+          },
+          {
+            "ts": 1343.2,
+            "y": 158
+          },
+          {
+            "ts": 1369,
+            "y": 171
+          },
+          {
+            "ts": 1385.7,
+            "y": 179
+          },
+          {
+            "ts": 1401.9,
+            "y": 187
+          },
+          {
+            "ts": 1426.5,
+            "y": 199.5
+          },
+          {
+            "ts": 1451.4,
+            "y": 212
+          },
+          {
+            "ts": 1476.4,
+            "y": 224.5
+          },
+          {
+            "ts": 1493.8,
+            "y": 233
+          },
+          {
+            "ts": 1510.6,
+            "y": 241.5
+          },
+          {
+            "ts": 1526.6,
+            "y": 249.5
+          },
+          {
+            "ts": 1543.2,
+            "y": 257.5
+          },
+          {
+            "ts": 1559.9,
+            "y": 266
+          },
+          {
+            "ts": 1576.5,
+            "y": 274.5
+          },
+          {
+            "ts": 1593.2,
+            "y": 282.5
+          },
+          {
+            "ts": 1610.6,
+            "y": 291.5
+          },
+          {
+            "ts": 1627.3,
+            "y": 299.5
+          },
+          {
+            "ts": 1644,
+            "y": 308
+          },
+          {
+            "ts": 1668.4,
+            "y": 320
+          },
+          {
+            "ts": 1693.4,
+            "y": 332.5
+          },
+          {
+            "ts": 1710.6,
+            "y": 341.5
+          },
+          {
+            "ts": 1727.3,
+            "y": 349.5
+          },
+          {
+            "ts": 1744.1,
+            "y": 358
+          },
+          {
+            "ts": 1769,
+            "y": 370.5
+          },
+          {
+            "ts": 1793.7,
+            "y": 383
+          },
+          {
+            "ts": 1810.7,
+            "y": 391.5
+          },
+          {
+            "ts": 1835.2,
+            "y": 403.5
+          },
+          {
+            "ts": 1860.6,
+            "y": 416.5
+          },
+          {
+            "ts": 1885.2,
+            "y": 428.5
+          },
+          {
+            "ts": 1901.9,
+            "y": 437
+          },
+          {
+            "ts": 1919,
+            "y": 445.5
+          },
+          {
+            "ts": 1951.5,
+            "y": 462
+          },
+          {
+            "ts": 1969,
+            "y": 470.5
+          },
+          {
+            "ts": 1994,
+            "y": 482
+          },
+          {
+            "ts": 2010.4,
+            "y": 490
+          },
+          {
+            "ts": 2026.5,
+            "y": 499
+          },
+          {
+            "ts": 2043.9,
+            "y": 504
+          },
+          {
+            "ts": 2060.2,
+            "y": 516.5
+          },
+          {
+            "ts": 2077.3,
+            "y": 525
+          },
+          {
+            "ts": 2093.3,
+            "y": 533
+          },
+          {
+            "ts": 2110.4,
+            "y": 543.5
+          },
+          {
+            "ts": 2127.3,
+            "y": 550
+          },
+          {
+            "ts": 2151.4,
+            "y": 562
+          },
+          {
+            "ts": 2168.9,
+            "y": 571
+          },
+          {
+            "ts": 2210.7,
+            "y": 592
+          },
+          {
+            "ts": 2235.7,
+            "y": 604.5
+          },
+          {
+            "ts": 2277.3,
+            "y": 625.5
+          },
+          {
+            "ts": 2319,
+            "y": 646
+          },
+          {
+            "ts": 2335.7,
+            "y": 654.5
+          },
+          {
+            "ts": 2360.7,
+            "y": 667
+          },
+          {
+            "ts": 2384.9,
+            "y": 679.5
+          },
+          {
+            "ts": 2410.7,
+            "y": 692.5
+          },
+          {
+            "ts": 2427.3,
+            "y": 700.5
+          },
+          {
+            "ts": 2444.1,
+            "y": 709
+          },
+          {
+            "ts": 2468.2,
+            "y": 721
+          },
+          {
+            "ts": 2493.3,
+            "y": 733.5
+          },
+          {
+            "ts": 2518.1,
+            "y": 746
+          },
+          {
+            "ts": 2543.9,
+            "y": 759
+          },
+          {
+            "ts": 2568.9,
+            "y": 771.5
+          },
+          {
+            "ts": 2594,
+            "y": 784.5
+          },
+          {
+            "ts": 2618.8,
+            "y": 796.5
+          },
+          {
+            "ts": 2635.3,
+            "y": 803.5
+          },
+          {
+            "ts": 2660,
+            "y": 817.5
+          },
+          {
+            "ts": 2669,
+            "y": 822
+          },
+          {
+            "ts": 2685.7,
+            "y": 830.5
+          },
+          {
+            "ts": 2702.4,
+            "y": 838.5
+          },
+          {
+            "ts": 2718.9,
+            "y": 847
+          },
+          {
+            "ts": 3731.5,
+            "y": 1354
+          },
+          {
+            "ts": 3773.1,
+            "y": 1375
+          },
+          {
+            "ts": 3789.6,
+            "y": 1383
+          },
+          {
+            "ts": 3806,
+            "y": 1391.5
+          },
+          {
+            "ts": 3830.8,
+            "y": 1404
+          },
+          {
+            "ts": 3855.8,
+            "y": 1416.5
+          },
+          {
+            "ts": 3881.1,
+            "y": 1429
+          },
+          {
+            "ts": 3898.1,
+            "y": 1437.5
+          },
+          {
+            "ts": 3914.8,
+            "y": 1445.5
+          },
+          {
+            "ts": 3939.2,
+            "y": 1458
+          },
+          {
+            "ts": 3955.6,
+            "y": 1466
+          },
+          {
+            "ts": 3981.5,
+            "y": 1479
+          },
+          {
+            "ts": 4006.4,
+            "y": 1491.5
+          },
+          {
+            "ts": 4031.4,
+            "y": 1503.5
+          },
+          {
+            "ts": 4055.6,
+            "y": 1515.5
+          },
+          {
+            "ts": 4080.7,
+            "y": 1528
+          },
+          {
+            "ts": 4105.6,
+            "y": 1540.5
+          },
+          {
+            "ts": 4131.6,
+            "y": 1553.5
+          },
+          {
+            "ts": 4147.8,
+            "y": 1561.5
+          },
+          {
+            "ts": 4172.2,
+            "y": 1573.5
+          },
+          {
+            "ts": 4197.5,
+            "y": 1586
+          },
+          {
+            "ts": 4222.8,
+            "y": 1598.5
+          },
+          {
+            "ts": 4239.2,
+            "y": 1601.5
+          },
+          {
+            "ts": 4256.5,
+            "y": 1601.5
+          },
+          {
+            "ts": 4272.3,
+            "y": 1601.5
+          },
+          {
+            "ts": 4289.6,
+            "y": 1601.5
+          },
+          {
+            "ts": 4298.1,
+            "y": 1601.5
+          },
+          {
+            "ts": 4314.1,
+            "y": 1601.5
+          },
+          {
+            "ts": 4322.8,
+            "y": 1601.5
+          },
+          {
+            "ts": 4339.1,
+            "y": 1601.5
+          },
+          {
+            "ts": 4348.2,
+            "y": 1601.5
+          }
+        ],
+        "callbacks": {
+          "function c(e){if(r.current){let t=a.last?e-a.last:0;(t>30||!a.last)&&(a.clock+=Math.min(t,100),a.last=e,s())}a.rafId=requestAnimationFrame(c)}": {
+            "count": 118,
+            "total": 236.60000324249268,
+            "max": 5.900000095367432
+          },
+          "function t(){let t=i.current,n=r.current;if(!t||!n)return;let a=t.getBoundingClientRect(),l=t.offsetHeight-window.innerHeight,u=Math.min(Math.max(-a.top/l,0),1);n.style.setProperty(`--p`,u.toFixed(3)),!c&&!s.current&&(a.bottom<=0?o(!1):o(!0)),e=!1}": {
+            "count": 103,
+            "total": 13.099996566772461,
+            "max": 0.7999997138977051
+          },
+          "()=>{b=!1,y()}": {
+            "count": 103,
+            "total": 392.90000343322754,
+            "max": 11.100000381469727
+          },
+          "function o(){let n=e.getBoundingClientRect(),o=e.offsetHeight-window.innerHeight,s=Math.min(Math.max(-n.top/o,0),.999),c=Math.floor(s*4);c!==r&&(r=c,e.style.setProperty(`--step`,c),t.forEach((e,t)=>e.classList.toggle(`on`,t===c)));let l=a||s*4-c>=.25?c:Math.max(0,c-1);i!==l&&(i=l,e.setAttribute(`data-step`,i),e.style.setProperty(`--visual-step`,i))}": {
+            "count": 103,
+            "total": 1.600001335144043,
+            "max": 0.40000009536743164
+          },
+          "()=>{k=!1,O()}": {
+            "count": 103,
+            "total": 0.9999995231628418,
+            "max": 0.2999997138977051
+          }
+        },
+        "longTasks": [],
+        "loaf": [
+          {
+            "start": 2731,
+            "duration": 1025.5999999046326,
+            "blocking": 0,
+            "scripts": [
+              {
+                "duration": 11.100000381469727,
+                "forcedLayout": 9.7,
+                "source": "",
+                "position": -1,
+                "invoker": "FrameRequestCallback"
+              }
+            ]
+          }
+        ],
+        "started": 947.5,
+        "ended": 4355.900000095367,
+        "endY": 1601.5
+      }
+    }
+  ]
+}
