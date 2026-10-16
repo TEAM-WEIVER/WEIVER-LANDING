@@ -9,7 +9,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 const dist = resolve(root, 'apps/web/dist');
 const port = Number(process.env.SCROLL_LAB_PORT || 4175);
 const modes = {
-  original: { label: 'A · 원본 clip-x', css: '' },
+  original: { label: 'A · 원본 clip-x', css: '.content{overflow-x:clip!important;overflow-y:visible!important}' },
   visible: { label: 'B · 부모 clip 제거', css: '.content{overflow:visible!important}' },
   both: { label: 'C · 양축 clip', css: '.content{overflow:clip!important}' },
 };

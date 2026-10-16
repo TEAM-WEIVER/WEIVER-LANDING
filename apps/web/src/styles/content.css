@@ -815,8 +815,8 @@ footer { padding: 28px 0 48px; color: #cbd5e1; font-size: 0.85rem; border-top: 1
 footer { border-top: 0; }
 
 .reservation-survey [data-slot="field-label"] { display: flex; align-items: baseline; gap: 4px; }
-/* Clip horizontal illustration spill without creating a vertical scroll container. */
-.content { overflow-x: clip; }
+/* Clip both axes to keep sticky scenes stable without creating a scroll container. */
+.content { overflow: clip; }
 
 /* Custom Select's trigger and portal popup share the same field theme. */
 .reservation [data-slot="select-trigger"] {
