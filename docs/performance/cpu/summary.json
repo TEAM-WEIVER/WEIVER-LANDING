@@ -1,0 +1,839 @@
+{
+  "aggregation": "median of 3 independent runs; min/max retained; durations are CDP reported cumulative processing, not user-visible stall time",
+  "frameMetricsValidForSiteJank": false,
+  "experiments": [
+    {
+      "file": "chapter1-baseline-cpu4.json",
+      "region": "chapter1",
+      "variant": "baseline",
+      "cpuThrottle": 4,
+      "runs": 3,
+      "observedDpr": 3,
+      "LayoutCount": {
+        "median": 66,
+        "min": 61,
+        "max": 107
+      },
+      "RecalcStyleCount": {
+        "median": 232,
+        "min": 222,
+        "max": 262
+      },
+      "LayoutDurationMs": {
+        "median": 26.536000000000005,
+        "min": 25.701,
+        "max": 52.66300000000002
+      },
+      "RecalcStyleDurationMs": {
+        "median": 83.202,
+        "min": 67.956,
+        "max": 88.789
+      },
+      "ScriptDurationMs": {
+        "median": 61.92899999999998,
+        "min": 53.541999999999994,
+        "max": 85.626
+      },
+      "TaskDurationMs": {
+        "median": 461.02899999999994,
+        "min": 340.38800000000003,
+        "max": 783.7379999999999
+      },
+      "longTasksTotal": 0,
+      "chapterUpdates": [
+        113,
+        108,
+        97
+      ],
+      "skippedTerrain": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "chapter2-baseline-cpu4.json",
+      "region": "chapter2",
+      "variant": "baseline",
+      "cpuThrottle": 4,
+      "runs": 3,
+      "observedDpr": 3,
+      "LayoutCount": {
+        "median": 67,
+        "min": 65,
+        "max": 121
+      },
+      "RecalcStyleCount": {
+        "median": 142,
+        "min": 138,
+        "max": 254
+      },
+      "LayoutDurationMs": {
+        "median": 29.814000000000007,
+        "min": 25.2,
+        "max": 52.674
+      },
+      "RecalcStyleDurationMs": {
+        "median": 82.37199999999999,
+        "min": 76.89300000000001,
+        "max": 117.039
+      },
+      "ScriptDurationMs": {
+        "median": 42.323,
+        "min": 30.344999999999985,
+        "max": 67.20199999999998
+      },
+      "TaskDurationMs": {
+        "median": 360.36099999999993,
+        "min": 295.952,
+        "max": 618.7959999999999
+      },
+      "longTasksTotal": 0,
+      "chapterUpdates": [
+        64,
+        66,
+        120
+      ],
+      "skippedTerrain": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "chapter2-dedupe-calendar-text-cpu4.json",
+      "region": "chapter2",
+      "variant": "dedupe-calendar-text",
+      "cpuThrottle": 4,
+      "runs": 3,
+      "observedDpr": 3,
+      "LayoutCount": {
+        "median": 4,
+        "min": 4,
+        "max": 13
+      },
+      "RecalcStyleCount": {
+        "median": 117,
+        "min": 97,
+        "max": 231
+      },
+      "LayoutDurationMs": {
+        "median": 4.312999999999984,
+        "min": 3.513000000000016,
+        "max": 6.9199999999999955
+      },
+      "RecalcStyleDurationMs": {
+        "median": 111.959,
+        "min": 87.659,
+        "max": 144.933
+      },
+      "ScriptDurationMs": {
+        "median": 44.91300000000001,
+        "min": 41.912000000000006,
+        "max": 68.075
+      },
+      "TaskDurationMs": {
+        "median": 343.92900000000003,
+        "min": 330.63,
+        "max": 502.27299999999997
+      },
+      "longTasksTotal": 0,
+      "chapterUpdates": [
+        67,
+        124,
+        54
+      ],
+      "skippedTerrain": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "chapter2-no-calendar-text-cpu4.json",
+      "region": "chapter2",
+      "variant": "no-calendar-text",
+      "cpuThrottle": 4,
+      "runs": 3,
+      "observedDpr": 3,
+      "LayoutCount": {
+        "median": 2,
+        "min": 2,
+        "max": 2
+      },
+      "RecalcStyleCount": {
+        "median": 157,
+        "min": 108,
+        "max": 163
+      },
+      "LayoutDurationMs": {
+        "median": 1.4470000000000038,
+        "min": 0.9749999999999898,
+        "max": 4.375000000000018
+      },
+      "RecalcStyleDurationMs": {
+        "median": 70.48899999999999,
+        "min": 58.769,
+        "max": 76.999
+      },
+      "ScriptDurationMs": {
+        "median": 31.832,
+        "min": 21.329000000000015,
+        "max": 44.96800000000001
+      },
+      "TaskDurationMs": {
+        "median": 256.52200000000005,
+        "min": 208.44399999999996,
+        "max": 290.796
+      },
+      "longTasksTotal": 0,
+      "chapterUpdates": [
+        60,
+        88,
+        84
+      ],
+      "skippedTerrain": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "chapter2-no-filters-cpu4.json",
+      "region": "chapter2",
+      "variant": "no-filters",
+      "cpuThrottle": 4,
+      "runs": 3,
+      "observedDpr": 3,
+      "LayoutCount": {
+        "median": 83,
+        "min": 61,
+        "max": 147
+      },
+      "RecalcStyleCount": {
+        "median": 173,
+        "min": 129,
+        "max": 303
+      },
+      "LayoutDurationMs": {
+        "median": 27.52800000000001,
+        "min": 23.112999999999996,
+        "max": 65.89699999999998
+      },
+      "RecalcStyleDurationMs": {
+        "median": 86.76599999999998,
+        "min": 59.30800000000001,
+        "max": 144.01500000000001
+      },
+      "ScriptDurationMs": {
+        "median": 40.69999999999999,
+        "min": 22.506999999999998,
+        "max": 86.706
+      },
+      "TaskDurationMs": {
+        "median": 342.55899999999997,
+        "min": 241.93399999999997,
+        "max": 713.4520000000001
+      },
+      "longTasksTotal": 0,
+      "chapterUpdates": [
+        60,
+        82,
+        146
+      ],
+      "skippedTerrain": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "fit-baseline-cpu4.json",
+      "region": "fit",
+      "variant": "baseline",
+      "cpuThrottle": 4,
+      "runs": 3,
+      "observedDpr": 3,
+      "LayoutCount": {
+        "median": 118,
+        "min": 92,
+        "max": 120
+      },
+      "RecalcStyleCount": {
+        "median": 182,
+        "min": 142,
+        "max": 183
+      },
+      "LayoutDurationMs": {
+        "median": 18.34999999999999,
+        "min": 15.75,
+        "max": 21.844
+      },
+      "RecalcStyleDurationMs": {
+        "median": 61.604000000000006,
+        "min": 44.1,
+        "max": 69.21
+      },
+      "ScriptDurationMs": {
+        "median": 50.42499999999998,
+        "min": 37.359,
+        "max": 58.913
+      },
+      "TaskDurationMs": {
+        "median": 348.60600000000005,
+        "min": 282.348,
+        "max": 378.252
+      },
+      "longTasksTotal": 0,
+      "chapterUpdates": [
+        113,
+        87,
+        115
+      ],
+      "skippedTerrain": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "fit-dedupe-fit-svg-cpu4.json",
+      "region": "fit",
+      "variant": "dedupe-fit-svg",
+      "cpuThrottle": 4,
+      "runs": 3,
+      "observedDpr": 3,
+      "LayoutCount": {
+        "median": 37,
+        "min": 36,
+        "max": 71
+      },
+      "RecalcStyleCount": {
+        "median": 169,
+        "min": 140,
+        "max": 282
+      },
+      "LayoutDurationMs": {
+        "median": 10.650999999999994,
+        "min": 8.23299999999999,
+        "max": 24.555999999999994
+      },
+      "RecalcStyleDurationMs": {
+        "median": 65.32400000000001,
+        "min": 48.984,
+        "max": 126.301
+      },
+      "ScriptDurationMs": {
+        "median": 86.42999999999999,
+        "min": 54.064,
+        "max": 104.038
+      },
+      "TaskDurationMs": {
+        "median": 620.824,
+        "min": 311.829,
+        "max": 724.1009999999999
+      },
+      "longTasksTotal": 1,
+      "chapterUpdates": [
+        173,
+        103,
+        87
+      ],
+      "skippedTerrain": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "fit-no-fit-svg-cpu4.json",
+      "region": "fit",
+      "variant": "no-fit-svg",
+      "cpuThrottle": 4,
+      "runs": 3,
+      "observedDpr": 3,
+      "LayoutCount": {
+        "median": 18,
+        "min": 17,
+        "max": 23
+      },
+      "RecalcStyleCount": {
+        "median": 153,
+        "min": 152,
+        "max": 177
+      },
+      "LayoutDurationMs": {
+        "median": 9.345000000000006,
+        "min": 8.715,
+        "max": 11.509999999999993
+      },
+      "RecalcStyleDurationMs": {
+        "median": 50.376,
+        "min": 44.02400000000001,
+        "max": 72.14200000000001
+      },
+      "ScriptDurationMs": {
+        "median": 43.275999999999996,
+        "min": 34.499,
+        "max": 59.171
+      },
+      "TaskDurationMs": {
+        "median": 240.22299999999996,
+        "min": 227.827,
+        "max": 331.26500000000004
+      },
+      "longTasksTotal": 0,
+      "chapterUpdates": [
+        114,
+        99,
+        102
+      ],
+      "skippedTerrain": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "hero-baseline-cpu1.json",
+      "region": "hero",
+      "variant": "baseline",
+      "cpuThrottle": 1,
+      "runs": 3,
+      "observedDpr": 3,
+      "LayoutCount": {
+        "median": 12,
+        "min": 12,
+        "max": 12
+      },
+      "RecalcStyleCount": {
+        "median": 141,
+        "min": 140,
+        "max": 142
+      },
+      "LayoutDurationMs": {
+        "median": 16.03,
+        "min": 14.589000000000004,
+        "max": 16.1
+      },
+      "RecalcStyleDurationMs": {
+        "median": 134.827,
+        "min": 130.61100000000002,
+        "max": 145.596
+      },
+      "ScriptDurationMs": {
+        "median": 261.48,
+        "min": 260.78999999999996,
+        "max": 273.49
+      },
+      "TaskDurationMs": {
+        "median": 527.566,
+        "min": 511.138,
+        "max": 570.3770000000001
+      },
+      "longTasksTotal": 0,
+      "chapterUpdates": [
+        82,
+        81,
+        81
+      ],
+      "skippedTerrain": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "hero-baseline-cpu4.json",
+      "region": "hero",
+      "variant": "baseline",
+      "cpuThrottle": 4,
+      "runs": 3,
+      "observedDpr": 3,
+      "LayoutCount": {
+        "median": 12,
+        "min": 12,
+        "max": 12
+      },
+      "RecalcStyleCount": {
+        "median": 145,
+        "min": 142,
+        "max": 146
+      },
+      "LayoutDurationMs": {
+        "median": 18.93199999999999,
+        "min": 16.387,
+        "max": 19.887
+      },
+      "RecalcStyleDurationMs": {
+        "median": 203.046,
+        "min": 201.017,
+        "max": 213.896
+      },
+      "ScriptDurationMs": {
+        "median": 298.41399999999993,
+        "min": 295.50200000000007,
+        "max": 310.53600000000006
+      },
+      "TaskDurationMs": {
+        "median": 684.496,
+        "min": 675.5989999999999,
+        "max": 744.387
+      },
+      "longTasksTotal": 0,
+      "chapterUpdates": [
+        83,
+        82,
+        84
+      ],
+      "skippedTerrain": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "hero-control-cpu1.json",
+      "region": "hero",
+      "variant": "control",
+      "cpuThrottle": 1,
+      "runs": 3,
+      "observedDpr": 3,
+      "LayoutCount": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "RecalcStyleCount": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "LayoutDurationMs": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "RecalcStyleDurationMs": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "ScriptDurationMs": {
+        "median": 2.37,
+        "min": 2.166,
+        "max": 2.401
+      },
+      "TaskDurationMs": {
+        "median": 19.168999999999997,
+        "min": 19.009999999999998,
+        "max": 20.649
+      },
+      "longTasksTotal": 0,
+      "chapterUpdates": [
+        0,
+        0,
+        0
+      ],
+      "skippedTerrain": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "hero-control-cpu4.json",
+      "region": "hero",
+      "variant": "control",
+      "cpuThrottle": 4,
+      "runs": 3,
+      "observedDpr": 3,
+      "LayoutCount": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "RecalcStyleCount": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "LayoutDurationMs": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "RecalcStyleDurationMs": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "ScriptDurationMs": {
+        "median": 0.6,
+        "min": 0.437,
+        "max": 0.791
+      },
+      "TaskDurationMs": {
+        "median": 4.819,
+        "min": 4.4,
+        "max": 7.263000000000001
+      },
+      "longTasksTotal": 0,
+      "chapterUpdates": [
+        0,
+        0,
+        0
+      ],
+      "skippedTerrain": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "hero-no-filters-cpu4.json",
+      "region": "hero",
+      "variant": "no-filters",
+      "cpuThrottle": 4,
+      "runs": 3,
+      "observedDpr": 3,
+      "LayoutCount": {
+        "median": 13,
+        "min": 13,
+        "max": 13
+      },
+      "RecalcStyleCount": {
+        "median": 146,
+        "min": 133,
+        "max": 206
+      },
+      "LayoutDurationMs": {
+        "median": 22.952,
+        "min": 20.781999999999996,
+        "max": 69.884
+      },
+      "RecalcStyleDurationMs": {
+        "median": 326.01,
+        "min": 167.93999999999997,
+        "max": 485.84099999999995
+      },
+      "ScriptDurationMs": {
+        "median": 297.51,
+        "min": 293.694,
+        "max": 339.28200000000004
+      },
+      "TaskDurationMs": {
+        "median": 1109.839,
+        "min": 616.2760000000001,
+        "max": 1331.9840000000002
+      },
+      "longTasksTotal": 1,
+      "chapterUpdates": [
+        84,
+        78,
+        103
+      ],
+      "skippedTerrain": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "hero-no-terrain-cpu4.json",
+      "region": "hero",
+      "variant": "no-terrain",
+      "cpuThrottle": 4,
+      "runs": 3,
+      "observedDpr": 3,
+      "LayoutCount": {
+        "median": 12,
+        "min": 12,
+        "max": 13
+      },
+      "RecalcStyleCount": {
+        "median": 139,
+        "min": 138,
+        "max": 139
+      },
+      "LayoutDurationMs": {
+        "median": 20.111000000000004,
+        "min": 17.681,
+        "max": 22.848000000000006
+      },
+      "RecalcStyleDurationMs": {
+        "median": 187.552,
+        "min": 171.741,
+        "max": 255.386
+      },
+      "ScriptDurationMs": {
+        "median": 26.16700000000001,
+        "min": 19.656000000000006,
+        "max": 45.650999999999996
+      },
+      "TaskDurationMs": {
+        "median": 356.149,
+        "min": 312.33400000000006,
+        "max": 504.35500000000013
+      },
+      "longTasksTotal": 0,
+      "chapterUpdates": [
+        80,
+        80,
+        80
+      ],
+      "skippedTerrain": [
+        87,
+        87,
+        88
+      ]
+    },
+    {
+      "file": "hero-paused-cpu4.json",
+      "region": "hero",
+      "variant": "paused",
+      "cpuThrottle": 4,
+      "runs": 3,
+      "observedDpr": 3,
+      "LayoutCount": {
+        "median": 9,
+        "min": 9,
+        "max": 9
+      },
+      "RecalcStyleCount": {
+        "median": 145,
+        "min": 144,
+        "max": 145
+      },
+      "LayoutDurationMs": {
+        "median": 14.899999999999997,
+        "min": 14.385000000000009,
+        "max": 20.964999999999996
+      },
+      "RecalcStyleDurationMs": {
+        "median": 133.842,
+        "min": 131.454,
+        "max": 175.654
+      },
+      "ScriptDurationMs": {
+        "median": 15.196000000000002,
+        "min": 11.191000000000006,
+        "max": 16.404000000000003
+      },
+      "TaskDurationMs": {
+        "median": 273.019,
+        "min": 234.27600000000004,
+        "max": 305.688
+      },
+      "longTasksTotal": 0,
+      "chapterUpdates": [
+        85,
+        85,
+        84
+      ],
+      "skippedTerrain": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "journey-baseline-cpu4.json",
+      "region": "journey",
+      "variant": "baseline",
+      "cpuThrottle": 4,
+      "runs": 3,
+      "observedDpr": 3,
+      "LayoutCount": {
+        "median": 4,
+        "min": 4,
+        "max": 15
+      },
+      "RecalcStyleCount": {
+        "median": 81,
+        "min": 66,
+        "max": 93
+      },
+      "LayoutDurationMs": {
+        "median": 5.076999999999998,
+        "min": 3.83,
+        "max": 12.948
+      },
+      "RecalcStyleDurationMs": {
+        "median": 22.203999999999994,
+        "min": 17.238999999999997,
+        "max": 22.631999999999998
+      },
+      "ScriptDurationMs": {
+        "median": 23.74799999999999,
+        "min": 17.994999999999997,
+        "max": 33.81600000000001
+      },
+      "TaskDurationMs": {
+        "median": 149.85799999999995,
+        "min": 122.84400000000001,
+        "max": 290.159
+      },
+      "longTasksTotal": 0,
+      "chapterUpdates": [
+        58,
+        73,
+        85
+      ],
+      "skippedTerrain": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "journey-no-filters-cpu4.json",
+      "region": "journey",
+      "variant": "no-filters",
+      "cpuThrottle": 4,
+      "runs": 3,
+      "observedDpr": 3,
+      "LayoutCount": {
+        "median": 15,
+        "min": 4,
+        "max": 18
+      },
+      "RecalcStyleCount": {
+        "median": 108,
+        "min": 99,
+        "max": 113
+      },
+      "LayoutDurationMs": {
+        "median": 4.208000000000004,
+        "min": 3.4590000000000036,
+        "max": 8.158999999999999
+      },
+      "RecalcStyleDurationMs": {
+        "median": 33.91400000000001,
+        "min": 27.102,
+        "max": 44.278999999999996
+      },
+      "ScriptDurationMs": {
+        "median": 34.54800000000001,
+        "min": 29.660000000000007,
+        "max": 35.062
+      },
+      "TaskDurationMs": {
+        "median": 213.07800000000003,
+        "min": 176.20000000000002,
+        "max": 214.62299999999996
+      },
+      "longTasksTotal": 0,
+      "chapterUpdates": [
+        90,
+        104,
+        97
+      ],
+      "skippedTerrain": [
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}
